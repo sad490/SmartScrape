@@ -2,6 +2,11 @@ package com.sad490.smartscrape;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.media.MediaRouter;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,17 +25,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.sad490.smartscrape.DataStorage.SaveData;
+import com.sad490.smartscrape.Posters.PostersFragment;
+import com.sad490.smartscrape.Recommand.RecommandFragment;
+import com.sad490.smartscrape.Recommand.dummy.DummyContent;
 import com.sad490.smartscrape.UserInfo.UserFragment;
-import com.sad490.smartscrape.dummy.DummyContent;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ComFragment.OnListFragmentInteractionListener,
-        StatisticFragment.OnListFragmentInteractionListener, UserFragment.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        UserFragment.OnFragmentInteractionListener,
+        RecommandFragment.OnRecommandPageListener,
+        PostersFragment.OnPostersListener
+{
 
     private android.support.design.widget.TabLayout tabLayout;
     private SlideDisabledViewPager viewPager;
@@ -52,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         viewPager = (SlideDisabledViewPager) findViewById(R.id.pager);
         navigationView = (NavigationView)findViewById(R.id.nav_view);
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
-        BottomAdapter adapter = new BottomAdapter(getSupportFragmentManager(), FLAGS.HOME, userData);
+        BottomAdapter adapter = new BottomAdapter(getSupportFragmentManager(), FLAGS.HOME, userData, getApplicationContext());
         viewPager.setAdapter(adapter);
 
         // tabLayout.setupWithViewPager(viewPager);
@@ -142,9 +152,17 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+    public void onRecommandClick(DummyContent.DummyItem uri){
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(), PosterDetail.class);
+        intent.putExtra("Item_Id", uri.id);
+        startActivityForResult(intent, 1);
+    }
+
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item){
-        Log.d("List Fragment", "Interaction");
+    public void onPosterClick(com.sad490.smartscrape.Posters.dummy.DummyContent.DummyItem uri) {
+        Toast.makeText(getApplicationContext(), uri.id, Toast.LENGTH_SHORT).show();
     }
 
     @Override

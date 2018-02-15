@@ -1,10 +1,13 @@
 package com.sad490.smartscrape;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.sad490.smartscrape.NetWork.User;
+import com.sad490.smartscrape.Posters.PostersFragment;
+import com.sad490.smartscrape.Recommand.RecommandFragment;
 import com.sad490.smartscrape.UserInfo.UserFragment;
 
 import java.util.ArrayList;
@@ -16,28 +19,29 @@ import java.util.List;
 
 public class BottomAdapter extends FragmentPagerAdapter {
 
-    private TabsPagerAdapter adapter;
     private FLAGS flags;
     private List<Fragment> fragments = new ArrayList<>();
     private static UserData userData;
+    private static Context context;
 
-    public BottomAdapter(FragmentManager fm, FLAGS _flag, UserData _userData) {
+    public BottomAdapter(FragmentManager fm, FLAGS _flag, UserData _userData, Context _context) {
         super(fm);
         flags = _flag;
+        context = _context;
         // adapter = new TabsPagerAdapter(fm, _flag);
         userData = _userData;
         init();
     }
 
     private void init() {
-        Fragment fragment0 = new ViewPagerFragment();
+        Fragment fragment0 = RecommandFragment.newInstance(context);
         //TODO : This Fragment must use Adapter !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         fragments.add(fragment0);
         UserFragment fragment1 = UserFragment.newInstance("Hello", "Baby", userData);
         fragments.add(fragment1);
-        Fragment fragment2 = StatisticFragment.newInstance();
+        Fragment fragment2 = UserFragment.newInstance("Hello", "Baby", userData);
         fragments.add(fragment2);
-        Fragment fragment3 = new ViewPagerFragment();
+        Fragment fragment3 = PostersFragment.newInstance(3);
         fragments.add(fragment3);
     }
 

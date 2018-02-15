@@ -1,4 +1,4 @@
-package com.sad490.smartscrape.dummy;
+package com.sad490.smartscrape.Posters.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ public class DummyContent {
     }
 
     private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position), getPassage());
+        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
     }
 
     private static String makeDetails(int position) {
@@ -50,10 +50,6 @@ public class DummyContent {
         return builder.toString();
     }
 
-    private static String getPassage() {
-        return new String("Passage");
-    }
-
     /**
      * A dummy item representing a piece of content.
      */
@@ -61,13 +57,11 @@ public class DummyContent {
         public final String id;
         public final String content;
         public final String details;
-        public final String passage;
 
-        public DummyItem(String id, String content, String details, String _passage) {
+        public DummyItem(String id, String content, String details) {
             this.id = id;
             this.content = content;
             this.details = details;
-            this.passage = _passage;
         }
 
         @Override

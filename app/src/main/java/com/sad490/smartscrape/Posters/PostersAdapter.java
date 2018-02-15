@@ -1,30 +1,30 @@
-package com.sad490.smartscrape;
+package com.sad490.smartscrape.Posters;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sad490.smartscrape.ComFragment.OnListFragmentInteractionListener;
-import com.sad490.smartscrape.NetWork.Log;
-import com.sad490.smartscrape.NewsDetail.PosterDetail;
-import com.sad490.smartscrape.dummy.DummyContent.DummyItem;
+import com.sad490.smartscrape.Posters.PostersFragment.OnPostersListener;
+import com.sad490.smartscrape.Posters.dummy.DummyContent.DummyItem;
+import com.sad490.smartscrape.R;
 
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * specified {@link PostersFragment.OnPostersListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
+public class PostersAdapter extends RecyclerView.Adapter<PostersAdapter.ViewHolder> {
 
     private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final PostersFragment.OnPostersListener mListener;
 
-    public MyItemRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public PostersAdapter(List<DummyItem> items, PostersFragment.OnPostersListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -32,7 +32,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item, parent, false);
+                .inflate(R.layout.fragment_posters, parent, false);
         return new ViewHolder(view);
     }
 
@@ -40,17 +40,15 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
-        holder.mPassage.setText(mValues.get(position).passage);
+        holder.mContentView.setImageBitmap(Bitmap.createBitmap( 300, 300, Bitmap.Config.ARGB_8888 ));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    Log.d("Clicked", "Start. ");
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onPosterClick(holder.mItem);
                 }
             }
         });
@@ -64,33 +62,19 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
-        public final TextView mContentView;
-        public final TextView mPassage;
+        public final ImageView mContentView;
         public DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.id);
-            mPassage = (TextView) view.findViewById(R.id.passage_content);
-            mContentView = (TextView) view.findViewById(R.id.content);
-            init();
-        }
-
-        private void init() {
-            mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent();
-                    intent.setClass(view.getContext(), PosterDetail.class);
-                    view.getContext().startActivity(intent);
-                }
-            });
+            mContentView = (ImageView) view.findViewById(R.id.content);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '"  + "'";
         }
     }
 }

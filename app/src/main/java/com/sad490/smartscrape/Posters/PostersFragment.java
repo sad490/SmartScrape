@@ -1,9 +1,7 @@
-package com.sad490.smartscrape;
+package com.sad490.smartscrape.Posters;
 
 import android.content.Context;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,39 +10,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sad490.smartscrape.dummy.DummyContent;
-import com.sad490.smartscrape.dummy.DummyContent.DummyItem;
+import com.sad490.smartscrape.R;
+import com.sad490.smartscrape.Posters.dummy.DummyContent;
+import com.sad490.smartscrape.Posters.dummy.DummyContent.DummyItem;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import co.lujun.androidtagview.TagContainerLayout;
 
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnPostersListener}
  * interface.
  */
-public class ComFragment extends Fragment {
+public class PostersFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
-    private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private int mColumnCount = 3;
+    private OnPostersListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ComFragment() {
+    public PostersFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ComFragment newInstance(int columnCount) {
-        ComFragment fragment = new ComFragment();
+    public static PostersFragment newInstance(int columnCount) {
+        PostersFragment fragment = new PostersFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -63,39 +59,28 @@ public class ComFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-        List<String> Tags = new ArrayList<>();
-        Tags.add("C++");
-        Tags.add("Java");
-        Tags.add("Python");
-        // TagContainerLayout mTagContainerLayout = (TagContainerLayout) view.findViewById(R.id.cloud_tags);
-        // mTagContainerLayout.setTags(Tags);
+        View view = inflater.inflate(R.layout.fragment_posters_list, container, false);
 
         // Set the adapter
-        /*
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
-                // recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new PostersAdapter(DummyContent.ITEMS, mListener));
         }
-        */
-        TabLayout tabLayout = view.findViewById(R.id.tabs);
-        RecyclerView recyclerView = view.findViewById(R.id.list);
-
-        recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
         return view;
     }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnPostersListener) {
+            mListener = (OnPostersListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -118,8 +103,8 @@ public class ComFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnListFragmentInteractionListener {
+    public interface OnPostersListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onPosterClick(DummyItem item);
     }
 }
