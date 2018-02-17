@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.ExpandableListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sad490.smartscrape.NetWork.User;
 
@@ -22,6 +25,13 @@ public class LoginActivity extends Activity {
     private Button login ;
     private EditText name, pwd_text;
     private TextView create_account;
+
+    private static boolean Logined = false;
+
+    private static final int Login_Successed = 0;
+    private static final int Login_Failed = -1;
+
+    public static UserData userData = new UserData();
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -42,18 +52,8 @@ public class LoginActivity extends Activity {
             public void onClick(View view) {
                 String user_name = name.getText().toString();
                 String pwd = pwd_text.getText().toString();
-
-                if (CheckPwd(user_name, pwd)) {
-                    Log.d("Check pwd","Success");
-                    Intent intent = new Intent();
-                    intent.setClass(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else {
-                    Log.d("Check pwd", "Fail");
-                }
-
+                CheckPwd(user_name, pwd);
+                // todo : Change it
             }
         });
 
@@ -67,6 +67,30 @@ public class LoginActivity extends Activity {
         });
     }
 
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                //根据msg.what的值来处理不同的UI操作
+                case Login_Successed:
+                    Log.d("Check pwd","Success");
+                    Intent intent = new Intent();
+                    intent.putExtra("UserData", userData);
+                    intent.setClass(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                    break;
+                case Login_Failed:
+                    Log.d("Check pwd", "Fail");
+                    break;
+                default:
+                    super.handleMessage(msg);
+                    break;
+            }
+
+        }
+    };
+
     /**
      * Login Thread .
      */
@@ -74,9 +98,18 @@ public class LoginActivity extends Activity {
         @Override
         public void run() {
             try {
-                // User.Login(getApplicationContext(), "sad490", "980515");
-                User.App_Login("sad490", "980515");
+                Logined = User.Login(getApplicationContext(), name.getText().toString(), pwd_text.getText().toString());
+                // User.App_Login("sad490", "980515");
+                userData = User.getUserData();
+                userData.setPassword(pwd_text.getText().toString());
+                if ( Logined ) {
+                    Message message = mHandler.obtainMessage();
+                    message.what = Login_Successed;
+                    mHandler.sendMessage(message);
+                }
             }catch (Exception e) {
+                Logined = false;
+                // Toast.makeText(getApplicationContext(), "Network Error !!!", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }
@@ -114,7 +147,7 @@ public class LoginActivity extends Activity {
             return true;
         }*/
         new Thread(Login).start();
-        if (name.equals("a") && pwd.equals("a")){
+        if ( Logined ){
             return true;
         }
         return false;

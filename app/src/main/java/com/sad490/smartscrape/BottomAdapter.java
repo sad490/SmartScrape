@@ -1,6 +1,7 @@
 package com.sad490.smartscrape;
 
 import android.content.Context;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.sad490.smartscrape.NetWork.User;
 import com.sad490.smartscrape.Posters.PostersFragment;
 import com.sad490.smartscrape.Recommand.RecommandFragment;
+import com.sad490.smartscrape.StaticFragment.StaticFragment;
 import com.sad490.smartscrape.UserInfo.UserFragment;
 
 import java.util.ArrayList;
@@ -33,13 +35,31 @@ public class BottomAdapter extends FragmentPagerAdapter {
         init();
     }
 
+    // TODO : Write a listener !!!
+//    TabLayout.OnTabSelectedListener listener = new TabLayout.OnTabSelectedListener() {
+//        @Override
+//        public void onTabSelected(TabLayout.Tab tab) {
+//
+//        }
+//
+//        @Override
+//        public void onTabUnselected(TabLayout.Tab tab) {
+//
+//        }
+//
+//        @Override
+//        public void onTabReselected(TabLayout.Tab tab) {
+//
+//        }
+//    }
+
     private void init() {
         Fragment fragment0 = RecommandFragment.newInstance(context);
         //TODO : This Fragment must use Adapter !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         fragments.add(fragment0);
         UserFragment fragment1 = UserFragment.newInstance("Hello", "Baby", userData);
         fragments.add(fragment1);
-        Fragment fragment2 = UserFragment.newInstance("Hello", "Baby", userData);
+        Fragment fragment2 = StaticFragment.newInstance(1);
         fragments.add(fragment2);
         Fragment fragment3 = PostersFragment.newInstance(3);
         fragments.add(fragment3);

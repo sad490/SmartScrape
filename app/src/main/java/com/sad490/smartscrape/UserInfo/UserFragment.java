@@ -71,7 +71,7 @@ public class UserFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user, container, false);
         TextView userinfo = (TextView)view.findViewById(R.id.user_info);
-        userinfo.setText(userData.toString());
+        userinfo.setText(userData.getUsername());
         return view;
     }
 

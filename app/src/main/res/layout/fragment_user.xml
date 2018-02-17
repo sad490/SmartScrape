@@ -24,7 +24,10 @@
             android:id="@+id/user_info"
             android:layout_width="match_parent"
             android:layout_height="500px"
-            android:textColor="#ff0004"/>
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="30dp"
+            android:textColor="#000000"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_submit"

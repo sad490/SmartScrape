@@ -5,16 +5,18 @@ import android.widget.ListView;
 
 import com.sad490.smartscrape.UserData;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.jsoup.Jsoup;
+
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.io.StringReader;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -37,5 +39,64 @@ public class XMLProcessor {
         }
         serializer.endDocument();
         serializer.flush();
+    }
+    public static boolean haveElement( String html, String ele ) {
+        Document document = Jsoup.parse(html);
+        Elements element = document.select(ele);
+        List<String> href = element.eachAttr("href");
+        List<String> element_list = element.eachText();
+        for (String ele_item : href) {
+            Log.i("List Item ", ele_item);
+            if (ele_item.equals("/login")) {
+                return false;
+            }
+            if (ele_item.equals("/logout")) {
+                return true;
+            }
+        }
+        // Log.e("Login Element ", element.toString());
+        return false;
+    }
+
+    public static UserData getUserDatafromXML( String XML ) throws Exception {
+        UserData userData = new UserData();
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        XmlPullParser parser = factory.newPullParser();
+        parser.setInput(new StringReader(XML));
+        int eventType = parser.getEventType(); String name = "";
+        String version = "";
+        while (eventType != XmlPullParser.END_DOCUMENT)
+        {
+            String nodeName = parser.getName();
+            switch (eventType)
+            {
+                case XmlPullParser.START_TAG:
+                {
+                    if ("username".equals(nodeName))
+                    {
+                        userData.setUsername(parser.nextText());
+                    }
+                    else if ("email".equals(nodeName))
+                    {
+                        userData.setEmail( parser.nextText() );
+                    }
+                    break;
+                }
+                case XmlPullParser.END_TAG:
+                {
+                    if ("webpage".equals(nodeName))
+                    {
+                        // Log.d("MainActivity", "name is " + name);
+                        // Log.d("MainActivity", "version is " + version);
+                        Log.i("UserData", userData.toString());
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            eventType = parser.next();
+        }
+        return userData;
     }
 }

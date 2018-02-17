@@ -5,5 +5,7 @@ package com.sad490.smartscrape;
  */
 
 public enum Constant {
-    ITEM_ID
+    ITEM_ID,
+    Login_Successed,
+    Login_Failed
 };

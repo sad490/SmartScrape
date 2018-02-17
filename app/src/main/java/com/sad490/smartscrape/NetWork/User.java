@@ -3,6 +3,9 @@ package com.sad490.smartscrape.NetWork;
 import android.content.Context;
 import android.util.Log;
 
+import com.sad490.smartscrape.GridFragment.Element;
+import com.sad490.smartscrape.UserData;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -33,6 +36,8 @@ public class User {
     private static HttpCookie cookie;
     private static HttpURLConnection urlConnection;
 
+    private static DefaultHttpClient httpclient;
+
     /**
      *  This is useless
      * @param context
@@ -44,7 +49,7 @@ public class User {
     public static boolean Login(Context context, String username, String password) throws Exception {
         URL url = new URL("http://111.230.181.121/login/");
         String csrf = "";
-        DefaultHttpClient httpclient = new DefaultHttpClient();
+        httpclient = new DefaultHttpClient();
         HttpGet httpget = new HttpGet("http://111.230.181.121/login/");
         HttpResponse response = httpclient.execute(httpget);
         HttpEntity entity = response.getEntity();
@@ -56,16 +61,17 @@ public class User {
         }
         HttpPost httpPost = new HttpPost("http://111.230.181.121/login/");
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-        nvps.add(new BasicNameValuePair("username", "sad490"));
-        nvps.add(new BasicNameValuePair("password", "980515"));
+        nvps.add(new BasicNameValuePair("username", username));
+        nvps.add(new BasicNameValuePair("password", password));
         nvps.add(new BasicNameValuePair("csrfmiddlewaretoken", csrf));
         httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
         httpPost.setHeader("Content-type", "application/x-www-form-urlencoded");
         httpPost.setHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
         HttpResponse response1 = httpclient.execute(httpPost);
-        Log.i("Response", response1.getStatusLine().toString());
-        Log.i("Response", response1.getEntity().toString());
+        Log.i("Response : ", response1.getEntity().getContent().toString());
+        // Log.i("Response", response1.getEntity().toString());
         HttpGet httpget2 = new HttpGet("http://111.230.181.121/");
+
         HttpResponse response2 = httpclient.execute(httpget2);
         int ch;
         InputStream inputStream = response2.getEntity().getContent();
@@ -73,8 +79,10 @@ public class User {
         while((ch = inputStream.read()) != -1) {
             sb.append((char) ch);
         }
-        Log.i("Get2", sb.toString());
-        return false;
+        String html = sb.toString();
+        Log.i("Get2", html);
+
+        return XMLProcessor.haveElement(html, "a");
     }
 
     /**
@@ -124,5 +132,22 @@ public class User {
      */
     private static String getCsrffromCookie( String cookie ) {
         return cookie.substring(cookie.indexOf("value: ") + 7, cookie.indexOf("value: ") + 7 + 64);
+    }
+
+    public static UserData getUserData() throws Exception{
+        UserData userData;
+
+        HttpGet httpget = new HttpGet("http://111.230.181.121/app_person");
+        HttpResponse response = httpclient.execute(httpget);
+        int ch;
+        InputStream inputStream = response.getEntity().getContent();
+        StringBuilder sb = new StringBuilder();
+        while((ch = inputStream.read()) != -1) {
+            sb.append((char) ch);
+        }
+        String html = sb.toString();
+        Log.i("Get2", html);
+        userData = XMLProcessor.getUserDatafromXML(html);
+        return userData;
     }
 }

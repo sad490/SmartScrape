@@ -2,6 +2,7 @@ package com.sad490.smartscrape.Recommand;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +16,11 @@ import com.sad490.smartscrape.Recommand.dummy.DummyContent;
 import com.sad490.smartscrape.Recommand.dummy.DummyContent.DummyItem;
 import com.sad490.smartscrape.UserInfo.UserFragment;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import co.lujun.androidtagview.TagContainerLayout;
+import co.lujun.androidtagview.TagView;
 
 /**
  * A fragment representing a list of Items.
@@ -62,18 +67,36 @@ public class RecommandFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        Context context = view.getContext();
+        recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
+        TabLayout tabLayout = view.findViewById(R.id.tabcard);
+        tabLayout.addTab(tabLayout.newTab().setText("Followed"));
+        tabLayout.addTab(tabLayout.newTab().setText("Recommand"));
+        tabLayout.addTab(tabLayout.newTab().setText("All"));
+
+
+        List<String> tags = new ArrayList<>();
+        tags.add("C++");
+        tags.add("Java");
+        tags.add("Python");
+        TagContainerLayout mTagContainerLayout = (TagContainerLayout) view.findViewById(R.id.tagview);
+        mTagContainerLayout.setTags(tags);
+
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
+//        if (view instanceof RecyclerView) {
+//            Context context_inside = view.getContext();
+//            RecyclerView recyclerView_inside = (RecyclerView) view;
+//            if (mColumnCount <= 1) {
+//                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//            } else {
+//                recyclerView.setLayoutManager(new GridLayoutManager(context_inside, mColumnCount));
+//            }
+//            recyclerView_inside.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+//        }
         return view;
     }
 

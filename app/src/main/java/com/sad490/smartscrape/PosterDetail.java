@@ -43,5 +43,9 @@ public class PosterDetail extends FragmentActivity implements GridFragment.OnGri
     public void onGridItemClick(Element.ElementItem item){
         Log.d("Clicked : ", item.id);
         Toast.makeText(getApplicationContext(), item.id, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(), BlogViewer.class);
+        intent.putExtra("Item_Id", item.id);
+        startActivityForResult(intent, 1);
     }
 }
