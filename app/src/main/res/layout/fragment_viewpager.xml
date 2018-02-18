@@ -9,26 +9,29 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
-        android:background="#000000"
+        android:background="#ffffff"
         android:fillViewport="false"
         app:tabMode="fixed"
         app:layout_scrollFlags="scroll"
         app:tabIndicatorColor="#057523"
         app:tabIndicatorHeight="2.0dp"
-        app:tabSelectedTextColor="#057523"
-        app:tabTextColor="#ced0d3">
+        app:tabSelectedTextColor="#0a9e32"
+        app:tabTextColor="#000000">
 
         <android.support.design.widget.TabItem
+            android:id="@+id/tab1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="a" />
 
         <android.support.design.widget.TabItem
+            android:id="@+id/tab2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="b" />
 
         <android.support.design.widget.TabItem
+            android:id="@+id/tab3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="c" />

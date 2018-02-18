@@ -50,9 +50,9 @@ public class DummyContent {
     static {
         // Add some sample items.
         // TODO : How to get bitmap from internet ......
-        Bitmap newb = Bitmap.createBitmap( 300, 300, Bitmap.Config.ARGB_8888 );
+        /// Bitmap newb = Bitmap.createBitmap( 300, 300, Bitmap.Config.ARGB_8888 );
         for (int i = 1; i <= COUNT; i++) {
-            addItem(createDummyItem(i, newb));
+            addItem(createDummyItem(i, "Sample"));
         }
     }
 
@@ -61,8 +61,8 @@ public class DummyContent {
         ITEM_MAP.put(item.id, item);
     }
 
-    private static DummyItem createDummyItem(int position, Bitmap bitmap) {
-        return new DummyItem(String.valueOf(position), bitmap, makeDetails(position));
+    private static DummyItem createDummyItem(int position, String content) {
+        return new DummyItem(String.valueOf(position), content, makeDetails(position));
     }
 
     private static String makeDetails(int position) {
@@ -79,10 +79,10 @@ public class DummyContent {
      */
     public static class DummyItem {
         public final String id;
-        public final Bitmap content;
+        public final String content;
         public final String details;
 
-        public DummyItem(String id, Bitmap content, String details) {
+        public DummyItem(String id, String content, String details) {
             this.id = id;
             this.content = content;
             this.details = details;

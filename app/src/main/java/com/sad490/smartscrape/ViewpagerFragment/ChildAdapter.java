@@ -9,6 +9,7 @@ import com.sad490.smartscrape.FLAGS;
 import com.sad490.smartscrape.Recommand.RecommandFragment;
 import com.sad490.smartscrape.UserData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class ChildAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> fragments;
+    private List<Fragment> fragments = new ArrayList<>();
 
     private static Context context;
     private UserData userData;

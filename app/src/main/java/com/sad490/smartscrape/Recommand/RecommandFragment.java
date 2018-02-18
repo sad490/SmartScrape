@@ -33,7 +33,7 @@ public class RecommandFragment extends Fragment  {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
-    private int mColumnCount = 2;
+    private int mColumnCount = 1;
     private OnRecommandPageListener mListener;
     public static Context context_App;
 
@@ -71,12 +71,6 @@ public class RecommandFragment extends Fragment  {
         Context context = view.getContext();
         recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-
-        TabLayout tabLayout = view.findViewById(R.id.tabcard);
-        tabLayout.addTab(tabLayout.newTab().setText("Followed"));
-        tabLayout.addTab(tabLayout.newTab().setText("Recommand"));
-        tabLayout.addTab(tabLayout.newTab().setText("All"));
-
 
         List<String> tags = new ArrayList<>();
         tags.add("C++");

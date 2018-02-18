@@ -7,17 +7,10 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabcard"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android" />
-
     <co.lujun.androidtagview.TagContainerLayout
         android:id="@+id/tagview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tabcard"
         android:layout_margin="0dp"
         android:padding="10dp"
         app:container_enable_drag="false"
