@@ -4,13 +4,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <TextView
         android:id="@+id/header"
         android:background="@color/pink"
         android:layout_width="100dp"
         android:layout_height="100dp" />
 
-    <TextView
+    <ImageView
         android:id="@+id/content"
         android:layout_below="@id/header"
         android:layout_width="100dp"

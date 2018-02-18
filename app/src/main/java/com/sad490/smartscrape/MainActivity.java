@@ -10,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaRouter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
@@ -28,6 +30,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.sad490.smartscrape.DataStorage.SaveData;
+import com.sad490.smartscrape.NetWork.GetRecommand;
+import com.sad490.smartscrape.NetWork.Tag;
+import com.sad490.smartscrape.NetWork.User;
 import com.sad490.smartscrape.Posters.PostersFragment;
 import com.sad490.smartscrape.Recommand.RecommandFragment;
 import com.sad490.smartscrape.Recommand.dummy.DummyContent;
@@ -49,7 +54,11 @@ public class MainActivity extends AppCompatActivity
     private BottomNavigationView bottomNavigationView;
     private NavigationView navigationView;
     private UserData userData;
+    private List<Tag> tags = new ArrayList<>();
     private static SharedPreferences sharedPreferences;
+
+    private static final int Load_Data_finished = 1;
+    // private static final int Load_Data_ = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +131,33 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
+
+        new Thread(Load_data).start();
     }
+
+    Runnable Load_data = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                tags = GetRecommand.GetTitleAndArticle(User.getHttpclient());
+                Message message = mHandler.obtainMessage();
+                message.what = Load_Data_finished;
+                mHandler.sendMessage(message);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch( msg.what ) {
+                case Load_Data_finished:
+                    Log.d("Load Data Finished", "Finished");
+            }
+        }
+    };
 
     @Override
     public void onBackPressed() {

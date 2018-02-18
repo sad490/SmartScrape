@@ -17,6 +17,7 @@ import org.xmlpull.v1.XmlSerializer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -63,8 +64,8 @@ public class XMLProcessor {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         XmlPullParser parser = factory.newPullParser();
         parser.setInput(new StringReader(XML));
-        int eventType = parser.getEventType(); String name = "";
-        String version = "";
+        int eventType = parser.getEventType();
+
         while (eventType != XmlPullParser.END_DOCUMENT)
         {
             String nodeName = parser.getName();
@@ -98,5 +99,129 @@ public class XMLProcessor {
             eventType = parser.next();
         }
         return userData;
+    }
+
+    public static List<Tag> getTags( String html ) throws Exception {
+        List<Tag> tags = new ArrayList<>();
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        XmlPullParser parser = factory.newPullParser();
+        parser.setInput(new StringReader( html ));
+        int eventType = parser.getEventType();
+
+        int flags = 0;
+        String tag_name = "";
+        String tag_num = "";
+        String tag_url = "";
+        while (eventType != XmlPullParser.END_DOCUMENT)
+        {
+            String nodeName = parser.getName();
+
+
+
+            if ( nodeName != null ) {
+                // Log.i("tag_in_XMLProcessor:", nodeName);
+                if (nodeName.equals("tag")) {
+                    flags = 1;
+                }
+                if (flags == 1) {
+                    switch (eventType) {
+                        case XmlPullParser.START_TAG: {
+                            if ("tag_name".equals(nodeName)) {
+                                tag_name = parser.nextText();
+                            } else if ("tag_num".equals(nodeName)) {
+                                tag_num = parser.nextText();
+                            } else if ("tag_url".equals(nodeName)) {
+                                tag_url = parser.nextText();
+                            }
+                            break;
+                        }
+                        case XmlPullParser.END_TAG: {
+                            if ("tag".equals(nodeName)) {
+                                // Log.d("MainActivity", "name is " + name);
+                                // Log.d("MainActivity", "version is " + version);
+                                flags = 0;
+                                tags.add(new Tag(tag_name, tag_num, tag_url));
+                                tag_name = "";
+                                tag_num = "";
+                                tag_url = "";
+                            }
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+            }
+            else {
+
+            }
+            eventType = parser.next();
+        }
+        return tags;
+    }
+
+    public static List<Article> getArticle( String html ) throws Exception {
+        List<Article> articles = new ArrayList<>();
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        XmlPullParser parser = factory.newPullParser();
+        parser.setInput(new StringReader( html ));
+        int eventType = parser.getEventType();
+
+        int flags = 0;
+        Article article = null;
+        while (eventType != XmlPullParser.END_DOCUMENT)
+        {
+            String nodeName = parser.getName();
+
+            if ( nodeName != null ) {
+                if (nodeName.equals("article") && eventType == XmlPullParser.START_TAG) {
+                    Log.i("tag_in_XMLProcessor:", nodeName);
+                    article = new Article();
+                    flags = 1;
+                }
+                if (flags == 1) {
+                    switch (eventType) {
+                        case XmlPullParser.START_TAG: {
+                            if ("title".equals(nodeName)) {
+
+                                article.setTitle(parser.nextText());
+
+                            } else if ("date".equals(nodeName)) {
+
+                                article.setDate(parser.nextText());
+
+                            } else if ("publisher".equals(nodeName)) {
+
+                                article.setPublisher( parser.nextText());
+
+                            } else if ("url".equals(nodeName)) {
+
+                                article.setUrl(parser.nextText());
+
+                            }
+                            break;
+                        }
+                        case XmlPullParser.END_TAG: {
+                            if ("article".equals(nodeName)) {
+                                // Log.d("MainActivity", "name is " + name);
+                                // Log.d("MainActivity", "version is " + version);
+                                flags = 0;
+                                articles.add(article);
+                                article = null;
+                            }
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+            }
+            else {
+
+            }
+            eventType = parser.next();
+        }
+
+        return articles;
     }
 }

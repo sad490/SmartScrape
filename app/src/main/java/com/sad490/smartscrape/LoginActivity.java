@@ -43,6 +43,10 @@ public class LoginActivity extends Activity {
         pwd_text = (EditText)findViewById(R.id.input_password);
         create_account = (TextView)findViewById(R.id.link_signup);
 
+        // todo : donot forget delete it .
+        pwd_text.setText("980515");
+        name.setText("sad490");
+
         init();
     }
 
@@ -71,9 +75,8 @@ public class LoginActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                //根据msg.what的值来处理不同的UI操作
                 case Login_Successed:
-                    Log.d("Check pwd","Success");
+                    Log.d("名字","Success");
                     Intent intent = new Intent();
                     intent.putExtra("UserData", userData);
                     intent.setClass(getApplicationContext(), MainActivity.class);

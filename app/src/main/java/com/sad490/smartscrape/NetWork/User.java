@@ -150,4 +150,8 @@ public class User {
         userData = XMLProcessor.getUserDatafromXML(html);
         return userData;
     }
+
+    public static DefaultHttpClient getHttpclient() {
+        return httpclient;
+    }
 }

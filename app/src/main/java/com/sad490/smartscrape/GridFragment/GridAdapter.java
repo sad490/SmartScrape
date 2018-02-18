@@ -30,7 +30,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     @Override
     public GridAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item, parent, false);
+                .inflate(R.layout.fragment_gridfragment_item, parent, false);
         return new GridAdapter.ViewHolder(view);
     }
 
@@ -66,7 +66,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
+            mIdView = (TextView) view.findViewById(R.id.header);
             mContentView = (ImageView) view.findViewById(R.id.content);
         }
 
