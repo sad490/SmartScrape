@@ -11,6 +11,7 @@ import com.sad490.smartscrape.Posters.PostersFragment;
 import com.sad490.smartscrape.Recommand.RecommandFragment;
 import com.sad490.smartscrape.StaticFragment.StaticFragment;
 import com.sad490.smartscrape.UserInfo.UserFragment;
+import com.sad490.smartscrape.ViewpagerFragment.ViewPagerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,8 @@ public class BottomAdapter extends FragmentPagerAdapter {
 //    }
 
     private void init() {
-        Fragment fragment0 = RecommandFragment.newInstance(context);
+        // Fragment fragment0 = RecommandFragment.newInstance(context);
+        Fragment fragment0 = ViewPagerFragment.newInstance( context );
         //TODO : This Fragment must use Adapter !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         fragments.add(fragment0);
         UserFragment fragment1 = UserFragment.newInstance("Hello", "Baby", userData);
