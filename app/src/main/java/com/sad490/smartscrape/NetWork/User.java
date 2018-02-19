@@ -17,10 +17,12 @@ import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
@@ -75,9 +77,13 @@ public class User {
         HttpResponse response2 = httpclient.execute(httpget2);
         int ch;
         InputStream inputStream = response2.getEntity().getContent();
+        BufferedReader br = new BufferedReader(
+                new InputStreamReader(inputStream,"UTF-8"));
+        String data = "";
         StringBuilder sb = new StringBuilder();
-        while((ch = inputStream.read()) != -1) {
-            sb.append((char) ch);
+        while((data = br.readLine()) != null) {
+            sb.append(data);
+            sb.append("\n");
         }
         String html = sb.toString();
         Log.i("Get2", html);

@@ -7,7 +7,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
@@ -56,9 +58,13 @@ public class GetRecommand {
         HttpResponse response = httpClient.execute(get);
         int ch;
         InputStream inputStream = response.getEntity().getContent();
+        BufferedReader br = new BufferedReader(
+                new InputStreamReader(inputStream,"UTF-8"));
+        String data = "";
         StringBuilder sb = new StringBuilder();
-        while((ch = inputStream.read()) != -1) {
-            sb.append((char) ch);
+        while((data = br.readLine()) != null) {
+            sb.append(data);
+            sb.append("\n");
         }
         String html = sb.toString();
         // android.util.Log.i("Get", html);
