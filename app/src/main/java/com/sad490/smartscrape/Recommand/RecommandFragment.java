@@ -1,5 +1,6 @@
 package com.sad490.smartscrape.Recommand;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sad490.smartscrape.NetWork.Tag;
 import com.sad490.smartscrape.R;
 import com.sad490.smartscrape.Recommand.dummy.DummyContent;
 import com.sad490.smartscrape.Recommand.dummy.DummyContent.DummyItem;
@@ -21,6 +23,8 @@ import java.util.List;
 
 import co.lujun.androidtagview.TagContainerLayout;
 import co.lujun.androidtagview.TagView;
+import me.drakeet.multitype.Items;
+import me.drakeet.multitype.MultiTypeAdapter;
 
 /**
  * A fragment representing a list of Items.
@@ -36,6 +40,8 @@ public class RecommandFragment extends Fragment  {
     private int mColumnCount = 1;
     private OnRecommandPageListener mListener;
     public static Context context_App;
+
+    public static MultiTypeAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -69,8 +75,11 @@ public class RecommandFragment extends Fragment  {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         Context context = view.getContext();
-        recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-        recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+        // recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        // recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+        adapter = new MultiTypeAdapter();
+        adapter.register(RecItem.class, new RecItemViewBinder());
+        recyclerView.setAdapter(adapter);
 
         List<String> tags = new ArrayList<>();
         tags.add("C++");
@@ -78,7 +87,6 @@ public class RecommandFragment extends Fragment  {
         tags.add("Python");
         TagContainerLayout mTagContainerLayout = (TagContainerLayout) view.findViewById(R.id.tagview);
         mTagContainerLayout.setTags(tags);
-
 
         // Set the adapter
 //        if (view instanceof RecyclerView) {

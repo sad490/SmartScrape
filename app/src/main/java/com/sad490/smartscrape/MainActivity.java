@@ -34,12 +34,15 @@ import com.sad490.smartscrape.NetWork.GetRecommand;
 import com.sad490.smartscrape.NetWork.Tag;
 import com.sad490.smartscrape.NetWork.User;
 import com.sad490.smartscrape.Posters.PostersFragment;
+import com.sad490.smartscrape.Recommand.RecItem;
 import com.sad490.smartscrape.Recommand.RecommandFragment;
 import com.sad490.smartscrape.Recommand.dummy.DummyContent;
 import com.sad490.smartscrape.StaticFragment.StaticFragment;
 import com.sad490.smartscrape.UserInfo.UserFragment;
 import java.util.ArrayList;
 import java.util.List;
+
+import me.drakeet.multitype.Items;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -155,6 +158,12 @@ public class MainActivity extends AppCompatActivity
             switch( msg.what ) {
                 case Load_Data_finished:
                     Log.d("Load Data Finished", "Finished");
+                    Items items = new Items();
+                    for (int j = 0; j < tags.size(); ++j) {
+                        items.add(new RecItem(tags.get(j)));
+                        RecommandFragment.adapter.setItems(items);
+                        RecommandFragment.adapter.notifyDataSetChanged();
+                    }
             }
         }
     };
