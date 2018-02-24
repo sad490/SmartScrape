@@ -27,13 +27,17 @@ public class GridFragment extends Fragment {
 
     private String item_Id = "";
 
-    private static int mColumnCount = 2;
+    private static int mColumnCount = 1;
 
     private OnGridItemClickListener mListener;
 
-    public void GridFragment( OnGridItemClickListener listener ) {
-        mListener = listener;
+    public GridFragment(){
+
     }
+
+//    public GridFragment( OnGridItemClickListener listener ) {
+//        mListener = listener;
+//    }
 
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -71,6 +75,7 @@ public class GridFragment extends Fragment {
 
 
     @Override
+    // Note : This method is the first method been called .
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof GridFragment.OnGridItemClickListener) {

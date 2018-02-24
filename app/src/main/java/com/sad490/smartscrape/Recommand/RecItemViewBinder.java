@@ -17,6 +17,12 @@ import me.drakeet.multitype.ItemViewBinder;
  */
 public class RecItemViewBinder extends ItemViewBinder<RecItem, RecItemViewBinder.ViewHolder> {
 
+    private static RecommandFragment.OnRecommandPageListener mListener;
+
+    public RecItemViewBinder( RecommandFragment.OnRecommandPageListener _mListener ) {
+        mListener = _mListener;
+    }
+
     @NonNull
     @Override
     protected ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
@@ -25,9 +31,20 @@ public class RecItemViewBinder extends ItemViewBinder<RecItem, RecItemViewBinder
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull RecItem recItem) {
+    protected void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull final RecItem recItem) {
         holder.mIdView.setText(recItem.tag.getTag_name());
         holder.mContentView.setText(recItem.tag.getTag_url());
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onRecommandClick(recItem);
+                }
+            }
+        });
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

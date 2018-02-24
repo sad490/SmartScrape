@@ -147,9 +147,13 @@ public class User {
         HttpResponse response = httpclient.execute(httpget);
         int ch;
         InputStream inputStream = response.getEntity().getContent();
+        BufferedReader br = new BufferedReader(
+                new InputStreamReader(inputStream,"UTF-8"));
+        String data = "";
         StringBuilder sb = new StringBuilder();
-        while((ch = inputStream.read()) != -1) {
-            sb.append((char) ch);
+        while((data = br.readLine()) != null) {
+            sb.append(data);
+            sb.append("\n");
         }
         String html = sb.toString();
         Log.i("Get2", html);

@@ -44,6 +44,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).id);
         holder.mContentView.setImageBitmap(mValues.get(position).content);
+        holder.detailView.setText(mValues.get(position).details);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +62,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
         public final View mView;
         public final TextView mIdView;
         public final ImageView mContentView;
+        public final TextView detailView;
         public Element.ElementItem mItem;
 
         public ViewHolder(View view) {
@@ -68,6 +70,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.header);
             mContentView = (ImageView) view.findViewById(R.id.content);
+            detailView = (TextView)view.findViewById(R.id.detail);
         }
 
         @Override

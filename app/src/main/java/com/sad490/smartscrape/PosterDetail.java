@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.sad490.smartscrape.GridFragment.Element;
 import com.sad490.smartscrape.GridFragment.GridFragment;
 import com.sad490.smartscrape.NetWork.Log;
+import com.sad490.smartscrape.NetWork.Tag;
 
 /**
  * Created by sad490 on 2/14/18.
@@ -37,6 +38,8 @@ public class PosterDetail extends FragmentActivity implements GridFragment.OnGri
 
         Intent intent = getIntent();
         String Id = intent.getStringExtra("Item_Id");
+        Tag tag = intent.getParcelableExtra("Item_Tag");
+        Log.i("Get Tag: ", tag.toString());
     }
 
     @Override

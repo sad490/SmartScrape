@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity
         sharedPreferences = getSharedPreferences("SmartScrape", 0);
         //todo ::
         userData = getIntent().getParcelableExtra("UserData");
+        // userData = new UserData("sad490","980515","1049154785@qq.com");
         Log.d("UserData", userData.toString());
         // TODO : Here is the Bug !!!!!!!!!!! tabLayout already Delete !!!!!!!!!
         // tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -201,11 +202,13 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void onRecommandClick(DummyContent.DummyItem uri){
+    public void onRecommandClick(RecItem uri){
         Intent intent = new Intent();
-        intent.setClass(getApplicationContext(), BlogViewer.class);
+        intent.setClass(getApplicationContext(), PosterDetail.class);
         // todo : intent have to be changed ...
-        intent.putExtra("Item_Id", uri.id);
+        Log.d("To Send", uri.tag.toString());
+        intent.putExtra("Item_Id", uri.tag.getTag_name());
+        intent.putExtra("Item_Tag", uri.tag);
         startActivityForResult(intent, 1);
     }
 
