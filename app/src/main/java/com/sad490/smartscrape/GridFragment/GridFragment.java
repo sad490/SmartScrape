@@ -1,5 +1,6 @@
 package com.sad490.smartscrape.GridFragment;
 
+import android.arch.core.internal.FastSafeIterableMap;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,10 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sad490.smartscrape.Constant;
+import com.sad490.smartscrape.NetWork.Tag;
 import com.sad490.smartscrape.R;
 import com.sad490.smartscrape.Recommand.MyItemRecyclerViewAdapter;
+import com.sad490.smartscrape.Recommand.RecItem;
+import com.sad490.smartscrape.Recommand.RecItemViewBinder;
 import com.sad490.smartscrape.Recommand.RecommandFragment;
 import com.sad490.smartscrape.Recommand.dummy.DummyContent;
+
+import me.drakeet.multitype.Items;
+import me.drakeet.multitype.MultiTypeAdapter;
 
 /**
  * Created by sad490 on 2/14/18.
@@ -31,8 +38,11 @@ public class GridFragment extends Fragment {
 
     private OnGridItemClickListener mListener;
 
-    public GridFragment(){
+    public MultiTypeAdapter adapter;
 
+    public GridFragment(){
+        adapter = new MultiTypeAdapter();
+        adapter.register(Grid.class, new GridViewBinder(mListener));
     }
 
 //    public GridFragment( OnGridItemClickListener listener ) {
@@ -61,10 +71,12 @@ public class GridFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             // TODO : You need adapter !!!
-            recyclerView.setAdapter(new GridAdapter(Element.getData(this.item_Id), mListener));
+            // recyclerView.setAdapter(new GridAdapter(Element.getData(this.item_Id), mListener));
+            recyclerView.setAdapter(adapter);
         }
 
-//        header.setOnClickListener(new View.OnClickListener() {
+
+//        header.setOnClickListener(new View.OnClickListener() {RecItemViewBinder
 //            @Override
 //            public void onClick(View view) {
 //                Toast.makeText(view.getContext(), "Click the header", Toast.LENGTH_SHORT).show();
@@ -88,6 +100,6 @@ public class GridFragment extends Fragment {
 
     public interface OnGridItemClickListener {
         // TODO: Update argument type and name
-        void onGridItemClick(Element.ElementItem item);
+        void onGridItemClick(Grid item);
     }
 }

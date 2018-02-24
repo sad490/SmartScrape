@@ -43,7 +43,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     public void onBindViewHolder(final GridAdapter.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setImageBitmap(mValues.get(position).content);
+        // holder.mContentView.setImageBitmap(mValues.get(position).content);
         holder.detailView.setText(mValues.get(position).details);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +52,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onGridItemClick(holder.mItem);
+                    // mListener.onGridItemClick(holder.mItem);
                 }
             }
         });
@@ -61,7 +61,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
-        public final ImageView mContentView;
         public final TextView detailView;
         public Element.ElementItem mItem;
 
@@ -69,7 +68,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.header);
-            mContentView = (ImageView) view.findViewById(R.id.content);
             detailView = (TextView)view.findViewById(R.id.detail);
         }
 
