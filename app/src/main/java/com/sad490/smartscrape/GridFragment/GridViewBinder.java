@@ -3,6 +3,7 @@ package com.sad490.smartscrape.GridFragment;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class GridViewBinder extends ItemViewBinder<Grid, GridViewBinder.ViewHold
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
+                    Log.d("GridClick", "Clicked");
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onGridItemClick(grid);

@@ -224,4 +224,40 @@ public class XMLProcessor {
 
         return articles;
     }
+
+    public static String getArticleContent( String html ) throws Exception {
+        String content = "";
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        XmlPullParser parser = factory.newPullParser();
+        parser.setInput(new StringReader(html));
+        int eventType = parser.getEventType();
+
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            String nodeName = parser.getName();
+
+            if (nodeName != null) {
+                switch (eventType) {
+                    case XmlPullParser.START_TAG: {
+                        if ("content".equals(nodeName)) {
+                            content = parser.nextText();
+                        }
+                        break;
+                    }
+                    case XmlPullParser.END_TAG: {
+                        if ("content".equals(nodeName)) {
+                            // Log.d("MainActivity", "name is " + name);
+                            // Log.d("MainActivity", "version is " + version);
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            } else {
+
+            }
+            eventType = parser.next();
+        }
+        return content;
+    }
 }

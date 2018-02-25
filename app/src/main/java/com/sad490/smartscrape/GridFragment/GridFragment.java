@@ -42,7 +42,7 @@ public class GridFragment extends Fragment {
 
     public GridFragment(){
         adapter = new MultiTypeAdapter();
-        adapter.register(Grid.class, new GridViewBinder(mListener));
+
     }
 
 //    public GridFragment( OnGridItemClickListener listener ) {
@@ -51,6 +51,8 @@ public class GridFragment extends Fragment {
 
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
+
+        adapter.register(Grid.class, new GridViewBinder(mListener));
 
         if (getArguments() != null) {
             this.item_Id = getArguments().getString("Item_Id");

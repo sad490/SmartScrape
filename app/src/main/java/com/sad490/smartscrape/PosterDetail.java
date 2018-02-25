@@ -59,6 +59,8 @@ public class PosterDetail extends FragmentActivity implements GridFragment.OnGri
         Intent intent = new Intent();
         intent.setClass(getApplicationContext(), BlogViewer.class);
         intent.putExtra("Item_Id", item.getArticle().getTitle());
+        intent.putExtra("title", item.getArticle().getTitle());
+        intent.putExtra("blogurl", item.getArticle().getUrl());
         startActivityForResult(intent, 1);
     }
 }

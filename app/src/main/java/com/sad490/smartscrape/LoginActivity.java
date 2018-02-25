@@ -44,8 +44,8 @@ public class LoginActivity extends Activity {
         create_account = (TextView)findViewById(R.id.link_signup);
 
         // todo : donot forget delete it .
-        pwd_text.setText("980515");
-        name.setText("sad490");
+//        pwd_text.setText("980515");
+//        name.setText("sad490");
 
         init();
     }
