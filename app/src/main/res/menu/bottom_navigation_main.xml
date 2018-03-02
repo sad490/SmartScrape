@@ -6,24 +6,23 @@
         android:id="@+id/home"
         android:icon="@drawable/home"
         android:orderInCategory="100"
-        android:title="@string/action_settings" />
-    <item
-        android:id="@+id/search"
-        android:icon="@drawable/search"
-        android:orderInCategory="100"
-        android:title="Search" />
+        android:title="推荐" />
 
     <item
         android:id="@+id/comput"
         android:icon="@drawable/statistic"
         android:orderInCategory="100"
-        android:title="Statistic" />
+        android:title="统计" />
 
     <item
         android:id="@+id/poster"
         android:icon="@drawable/comment"
         android:orderInCategory="100"
-        android:title="Poster" />
-
+        android:title="发布者" />
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/search"
+        android:orderInCategory="100"
+        android:title="我的" />
 
 </menu>

@@ -54,9 +54,9 @@ public class ViewPagerFragment extends Fragment {
         adapter = new ChildAdapter( getChildFragmentManager(), userData, context );
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
-        tabs.getTabAt(0).setText("Followed");
-        tabs.getTabAt(1).setText("Stared");
-        tabs.getTabAt(2).setText("Recommand");
+        tabs.getTabAt(0).setText("关注");
+        tabs.getTabAt(1).setText("喜欢");
+        tabs.getTabAt(2).setText("推荐");
 
         return view;
     }
