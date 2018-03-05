@@ -2,6 +2,7 @@ package com.sad490.smartscrape.NetWork;
 
 import android.util.*;
 
+import org.apache.http.ContentTooLongException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -40,11 +41,19 @@ public class GrabArticle {
         String url = "http://111.230.181.121" + back;
         String html = getHtml(client, url);
         String content = "";
-        Log.i("html", html);
-        try {
-            content = XMLProcessor.getArticleContent(html);
-        }catch (Exception e) {
-            e.printStackTrace();
+        if (back.startsWith("/app_article")) {
+            Log.i("html", html);
+            try {
+                content = XMLProcessor.getArticleContent(html);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if (back.startsWith("/article")) {
+            try {
+                content = HtmlProcessor.getArticle(html);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return content;
     }

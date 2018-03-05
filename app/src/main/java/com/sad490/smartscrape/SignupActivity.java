@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.sad490.smartscrape.NetWork.User;
 
 /**
  * Created by sad490 on 1/15/18.
@@ -29,6 +33,9 @@ public class SignupActivity extends Activity {
     private boolean canClose;
 
     private static SharedPreferences sharedPreferences;
+
+    private static final int SIGNUP_SUCCESS = 1;
+    private static final int SIGNUP_FAILED = -1;
 
     @Override
     public void onCreate(Bundle saveInstance) {
@@ -49,6 +56,43 @@ public class SignupActivity extends Activity {
         init();
     }
 
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch( msg.what ) {
+                case SIGNUP_SUCCESS:
+                    Finish();
+                    break;
+                case SIGNUP_FAILED:
+                    Toast.makeText(getApplicationContext(), "Signup failed", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+    Runnable Signup = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                boolean ret_signed = User.Signup(Name, Email, Pwd);
+                if (ret_signed) {
+                    Message message = mHandler.obtainMessage();
+                    message.what = SIGNUP_SUCCESS;
+                    mHandler.sendMessage(message);
+                }else {
+                    Message message = mHandler.obtainMessage();
+                    message.what = SIGNUP_FAILED;
+                    mHandler.sendMessage(message);
+                }
+            }catch (Exception e) {
+                e.printStackTrace();
+                Message message = mHandler.obtainMessage();
+                message.what = SIGNUP_FAILED;
+                mHandler.sendMessage(message);
+            }
+        }
+    };
+
     private void init() {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,17 +106,21 @@ public class SignupActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Please check it !!!", Toast.LENGTH_SHORT).show();
                     return ;
                 }
-
-                Intent intent = new Intent();
-                intent.putExtra("Name", Name);
-                intent.putExtra("Pwd", Pwd);
-                intent.putExtra("Email", Email);
-                //设置返回数据
-                SignupActivity.this.setResult(Activity.RESULT_OK, intent);
-                //关闭Activity
-                SignupActivity.this.finish();
+                new Thread(Signup).start();
             }
         });
+    }
+
+    public void Finish() {
+        Intent intent = new Intent();
+        intent.putExtra("Name", Name);
+        intent.putExtra("Pwd", Pwd);
+        intent.putExtra("Email", Email);
+        intent.putExtra("UserData", new UserData(Name, Pwd, Email));
+        intent.setClass(this, MainActivity.class);
+        startActivity(intent);
+        //关闭Activity
+        SignupActivity.this.finish();
     }
 
     private boolean CheckValid() {

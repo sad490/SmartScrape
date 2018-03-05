@@ -2,6 +2,7 @@ package com.sad490.smartscrape.Recommand;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,8 @@ public class RecommandFragment extends Fragment  {
     public static Context context_App;
 
     public static MultiTypeAdapter adapter;
+    private static TagContainerLayout mTagContainerLayout = null;
+    private static List<String> Tags = new ArrayList<>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -78,18 +81,18 @@ public class RecommandFragment extends Fragment  {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView.addItemDecoration(new SpacesItemDecoration(8));
         Context context = view.getContext();
         // recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         // recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
 
         recyclerView.setAdapter(adapter);
 
-        List<String> tags = new ArrayList<>();
-        tags.add("C++");
-        tags.add("Java");
-        tags.add("Python");
-        TagContainerLayout mTagContainerLayout = (TagContainerLayout) view.findViewById(R.id.tagview);
-        mTagContainerLayout.setTags(tags);
+        mTagContainerLayout = (TagContainerLayout) view.findViewById(R.id.tagview);
+
+        if (Tags.size() > 0) {
+            mTagContainerLayout.setTags(Tags);
+        }
 
         // Set the adapter
 //        if (view instanceof RecyclerView) {
@@ -105,6 +108,14 @@ public class RecommandFragment extends Fragment  {
         return view;
     }
 
+    public static void setTags( List<String> tags ) {
+        // Tags = tags;
+        Tags.clear();
+        for (String tag : tags) {
+            Tags.add(tag);
+        }
+        mTagContainerLayout.setTags(Tags);
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -137,5 +148,25 @@ public class RecommandFragment extends Fragment  {
     public interface OnRecommandPageListener {
         // TODO: Update argument type and name
         void onRecommandClick(RecItem item);
+    }
+
+    public static class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+        private int space;
+
+        public SpacesItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view,
+                                   RecyclerView parent, RecyclerView.State state) {
+            outRect.left = space;
+            outRect.right = space;
+            outRect.bottom = space;
+
+            // Add top margin only for the first item to avoid double space between items
+            if (parent.getChildPosition(view) == 0)
+                outRect.top = space;
+        }
     }
 }

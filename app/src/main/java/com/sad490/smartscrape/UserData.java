@@ -67,6 +67,10 @@ public class UserData implements Parcelable{
         return this.password;
     }
 
+    public String getEmail() {
+        return Email;
+    }
+
     public void setLoginStatus(boolean status) {
         this.logined = status;
     }

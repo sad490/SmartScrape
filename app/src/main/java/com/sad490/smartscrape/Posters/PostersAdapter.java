@@ -48,7 +48,7 @@ public class PostersAdapter extends RecyclerView.Adapter<PostersAdapter.ViewHold
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onPosterClick(holder.mItem);
+                    // mListener.onPosterClick(holder.mItem);
                 }
             }
         });

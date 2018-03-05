@@ -6,7 +6,12 @@
         android:id="@+id/home"
         android:icon="@drawable/home"
         android:orderInCategory="100"
-        android:title="推荐" />
+        android:title="主页" />
+    <item
+        android:id="@+id/poster"
+        android:icon="@drawable/comment"
+        android:orderInCategory="100"
+        android:title="发布者" />
 
     <item
         android:id="@+id/comput"
@@ -14,11 +19,7 @@
         android:orderInCategory="100"
         android:title="统计" />
 
-    <item
-        android:id="@+id/poster"
-        android:icon="@drawable/comment"
-        android:orderInCategory="100"
-        android:title="发布者" />
+
     <item
         android:id="@+id/search"
         android:icon="@drawable/search"

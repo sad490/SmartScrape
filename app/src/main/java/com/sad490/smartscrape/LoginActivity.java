@@ -2,7 +2,9 @@ package com.sad490.smartscrape;
 
 import android.app.Activity;
 import android.app.ExpandableListActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,7 +15,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sad490.smartscrape.DataStorage.ExtractData;
 import com.sad490.smartscrape.NetWork.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sad490 on 1/15/18.
@@ -31,6 +37,8 @@ public class LoginActivity extends Activity {
     private static final int Login_Successed = 0;
     private static final int Login_Failed = -1;
 
+    private static SharedPreferences sharedPreferences;
+
     public static UserData userData = new UserData();
 
     @Override
@@ -42,6 +50,16 @@ public class LoginActivity extends Activity {
         name = (EditText)findViewById(R.id.input_email);
         pwd_text = (EditText)findViewById(R.id.input_password);
         create_account = (TextView)findViewById(R.id.link_signup);
+
+        List<String> keys = new ArrayList<>();
+        List<String> values = new ArrayList<>();
+        sharedPreferences = getSharedPreferences("SmartScrape", 0);
+        if (sharedPreferences.contains("Name")) {
+            ExtractData.ExtractSharedPreference(sharedPreferences, keys, values);
+
+            name.setText(values.get(2));
+            pwd_text.setText(values.get(1));
+        }
 
         // todo : donot forget delete it .
 //        pwd_text.setText("980515");
@@ -66,7 +84,8 @@ public class LoginActivity extends Activity {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(intent, 1);
+                startActivity(intent);
+                finish();
             }
         });
     }

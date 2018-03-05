@@ -91,6 +91,49 @@ public class User {
         return XMLProcessor.haveElement(html, "a");
     }
 
+
+    public static boolean Signup( String username, String Email, String password ) throws Exception {
+        String csrf = "";
+        httpclient = new DefaultHttpClient();
+        HttpGet httpget = new HttpGet("http://111.230.181.121/reg/");
+        HttpResponse response = httpclient.execute(httpget);
+        List<Cookie> cookies = httpclient.getCookieStore().getCookies();
+        for (Cookie cookie : cookies) {
+            Log.i("Cookie : ", cookie.toString());
+            csrf = getCsrffromCookie(cookie.toString());
+            Log.i("Cookie : ", csrf);
+        }
+
+        HttpPost httpPost = new HttpPost("http://111.230.181.121/reg/");
+        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+        nvps.add(new BasicNameValuePair("username", username));
+        nvps.add(new BasicNameValuePair("email", Email));
+        nvps.add(new BasicNameValuePair("password", password));
+        nvps.add(new BasicNameValuePair("csrfmiddlewaretoken", csrf));
+        httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
+        httpPost.setHeader("Content-type", "application/x-www-form-urlencoded");
+        httpPost.setHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
+        HttpResponse response1 = httpclient.execute(httpPost);
+        Log.i("Response : ", response1.getEntity().getContent().toString());
+
+        HttpGet httpget2 = new HttpGet("http://111.230.181.121/");
+
+        HttpResponse response2 = httpclient.execute(httpget2);
+        InputStream inputStream = response2.getEntity().getContent();
+        BufferedReader br = new BufferedReader(
+                new InputStreamReader(inputStream,"UTF-8"));
+        String data = "";
+        StringBuilder sb = new StringBuilder();
+        while((data = br.readLine()) != null) {
+            sb.append(data);
+            sb.append("\n");
+        }
+        String html = sb.toString();
+        Log.i("Get2", html);
+
+        return XMLProcessor.haveElement(html, "a");
+    }
+
     /**
      * This Function is the main Login Function .
      * @param username Username to Login .

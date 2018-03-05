@@ -7,8 +7,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.sad490.smartscrape.NetWork.GrabArticle;
 import com.sad490.smartscrape.NetWork.User;
 import com.sad490.smartscrape.Recommand.RecItem;
@@ -27,11 +30,15 @@ public class BlogViewer extends Activity {
     TextView title;
     TextView content;
 
+    private ImageView poster = null;
+
     private static String blogurl = "";
 
     private static final int LOAD_ARTICLE_FINISHED = 1;
 
     private String BlogContent = "";
+
+    private static String poster_url = "";
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -40,6 +47,7 @@ public class BlogViewer extends Activity {
 
         title = (TextView)findViewById(R.id.blogtitle);
         content = (TextView)findViewById(R.id.blogcontent);
+        poster = (ImageView)findViewById(R.id.poster);
         content.setMovementMethod(new ScrollingMovementMethod());
 
         Intent intent = getIntent();
@@ -48,6 +56,13 @@ public class BlogViewer extends Activity {
 
         // todo : you need a get data function .
         blogurl = intent.getStringExtra("blogurl");
+        poster_url = intent.getStringExtra("imageurl");
+        if (poster_url == null) {
+            Log.d("Url :", "NULL");
+            Glide.with(this).load("http://111.230.181.121/upload/pub/%E8%88%AA%E6%B5%B7%E5%AD%A6%E9%99%A2_gaitubao_com_243x243.jpg").centerCrop().into(poster);
+        }else {
+            Glide.with(this).load(poster_url).centerCrop().into(poster);
+        }
 
         new Thread(loadBlog).start();
     }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sad490 on 1/31/18.
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 public class SaveData {
 
-    public static boolean SaveSharedPreference ( SharedPreferences sharedPreferences, ArrayList<String> Keys, ArrayList<String> Values) {
+    public static boolean SaveSharedPreference (SharedPreferences sharedPreferences, List<String> Keys, List<String> Values) {
         if (Keys.size() != Values.size()) {
             return false;
         }

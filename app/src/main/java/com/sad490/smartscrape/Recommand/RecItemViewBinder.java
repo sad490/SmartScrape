@@ -1,6 +1,7 @@
 package com.sad490.smartscrape.Recommand;
 
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabItem;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +33,9 @@ public class RecItemViewBinder extends ItemViewBinder<RecItem, RecItemViewBinder
 
     @Override
     protected void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull final RecItem recItem) {
-        holder.mIdView.setText(recItem.tag.getTag_name());
-        holder.mContentView.setText(recItem.tag.getTag_url());
+        holder.mIdView.setText(recItem.article.getTitle());
+        holder.mContentView.setText(recItem.article.getPublisher());
+        holder.mTime.setText(recItem.article.getDate());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,12 +53,14 @@ public class RecItemViewBinder extends ItemViewBinder<RecItem, RecItemViewBinder
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
+        public final TextView mTime;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
+            mTime = (TextView)view.findViewById(R.id.label);
         }
 
         @Override

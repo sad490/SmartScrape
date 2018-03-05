@@ -225,6 +225,43 @@ public class XMLProcessor {
         return articles;
     }
 
+    public static List<String> getHeaderImageUrl( String html ) throws Exception {
+        List<String> urls = new ArrayList<>();
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        XmlPullParser parser = factory.newPullParser();
+        parser.setInput(new StringReader( html ));
+        int eventType = parser.getEventType();
+
+        while (eventType != XmlPullParser.END_DOCUMENT)
+        {
+            String nodeName = parser.getName();
+            if (nodeName == null || !nodeName.equals("img")) {
+                Log.d("NodeName", "" + nodeName);
+                eventType = parser.next();
+                continue;
+            }
+            if ( nodeName != null ) {
+                switch (eventType) {
+                    case XmlPullParser.START_TAG: {
+
+                        if ("img".equals(nodeName)) {
+                            urls.add(parser.getAttributeValue(null, "src"));
+                        }
+                        break;
+                    }
+                    case XmlPullParser.END_TAG: {
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+            eventType = parser.next();
+        }
+
+        return urls;
+    }
+
     public static String getArticleContent( String html ) throws Exception {
         String content = "";
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();

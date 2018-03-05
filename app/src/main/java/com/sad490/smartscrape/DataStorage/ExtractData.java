@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import java.security.Key;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Map;
  */
 
 public class ExtractData {
-    public static boolean ExtractSharedPreference (SharedPreferences sharedPreferences, ArrayList<String> Keys, ArrayList<String> Values) {
+    public static boolean ExtractSharedPreference (SharedPreferences sharedPreferences, List<String> Keys, List<String> Values) {
         if (!Keys.isEmpty() || !Values.isEmpty()) {
             return false;
         }
