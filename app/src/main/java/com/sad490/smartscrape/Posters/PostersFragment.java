@@ -90,7 +90,10 @@ public class PostersFragment extends Fragment {
         @Override
         public void run() {
             try {
-                List<Poster_element> urls = GrabImage.grubPostersHeaders(User.getHttpclient(), "http://111.230.181.121/pub_list");
+                List<Poster_element> urls = new ArrayList<>();
+
+                 urls = GrabImage.grubPostersHeaders(User.getHttpclient(), "http://111.230.181.121/pub_list");
+
                 posters.clear();
                 for (Poster_element url : urls) {
                     Log.d("Pub Urls : ", url.getTitle());
@@ -104,6 +107,12 @@ public class PostersFragment extends Fragment {
                 message.what = Load_Image_Finish;
                 mHandler.sendMessage(message);
             }catch (Exception e) {
+                try {
+                    Thread.sleep(5000);
+                }catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                new Thread(LoadingImages).start();
                 e.printStackTrace();
             }
         }
@@ -135,7 +144,6 @@ public class PostersFragment extends Fragment {
         }
 
         adapter.setItems(posters);
-        new Thread(LoadingImages).start();
     }
 
     @Override
@@ -158,6 +166,11 @@ public class PostersFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        new Thread(LoadingImages).start();
+    }
 
     @Override
     public void onAttach(Context context) {

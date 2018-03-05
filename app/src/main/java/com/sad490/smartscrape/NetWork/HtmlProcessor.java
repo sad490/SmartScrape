@@ -58,7 +58,8 @@ public class HtmlProcessor {
     public static List<String> getHeadersUrl( String html ) throws Exception {
         List<String> ret = new ArrayList<>();
         Document doc = Jsoup.parse(html);
-        Elements elements = doc.select("img");
+        Elements elements = doc.select("div.panel-body");
+        elements = elements.select("img");
         ret = elements.eachAttr("src");
         // Log.d("ret:", ret.get(0));
         return ret;

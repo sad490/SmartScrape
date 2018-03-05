@@ -3,14 +3,19 @@ package com.sad490.smartscrape.NetWork;
 import android.support.annotation.NonNull;
 import android.util.*;
 
+import com.sad490.smartscrape.Posters.Poster_element;
+import com.sad490.smartscrape.Posters.Posters;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +33,8 @@ import static com.sad490.smartscrape.NetWork.XMLProcessor.getTags;
  * @link http://111.230.181.121/app_rec
  */
 public class GetRecommand {
+
+    private static final String GenHost = "http://111.230.181.121";
 
     /**
      * This function get the url .
@@ -51,6 +58,16 @@ public class GetRecommand {
         }
         Log.d("Tags Size", "" + tags.size());
         return tags;
+    }
+
+    public static List<Posters> getStarred( DefaultHttpClient httpClient ) throws Exception {
+        List<Posters> posters = new ArrayList<>();
+        String html = getHtml(httpClient, "http://111.230.181.121/person");
+        List<Poster_element> temp = HtmlProcessor.getPostersElements(html);
+        for (Poster_element poster_element : temp) {
+            posters.add(new Posters(poster_element.getTitle(),  GenHost + poster_element.getImage_url(), poster_element.getPub_url()));
+        }
+        return posters;
     }
 
     public static String getHtml( HttpClient httpClient, String url ) throws Exception {

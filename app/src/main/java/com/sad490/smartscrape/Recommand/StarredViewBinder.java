@@ -1,10 +1,8 @@
-package com.sad490.smartscrape.Posters;
+package com.sad490.smartscrape.Recommand;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,38 +10,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.sad490.smartscrape.Posters.dummy.DummyContent;
+import com.sad490.smartscrape.Posters.Posters;
+import com.sad490.smartscrape.Posters.PostersFragment;
+import com.sad490.smartscrape.Posters.PostersViewBinder;
 import com.sad490.smartscrape.R;
-import com.sad490.smartscrape.Recommand.StarredFragment;
-
-import javax.sql.DataSource;
 
 import me.drakeet.multitype.ItemViewBinder;
 
 /**
- * Created by sad490 on 3/4/18.
+ * Created by hp on 2018/3/5.
  */
-public class PostersViewBinder extends ItemViewBinder<Posters, PostersViewBinder.ViewHolder> {
 
-    private static PostersFragment.OnPostersListener mListener = null;
+public class StarredViewBinder extends ItemViewBinder<Posters, StarredViewBinder.ViewHolder> {
+    private static StarredFragment.OnStareedPageListener mListener = null;
     private Context context = null;
 
-    public PostersViewBinder(PostersFragment.OnPostersListener listener, Context _context) {
+    public StarredViewBinder(StarredFragment.OnStareedPageListener listener, Context _context) {
         mListener = listener;
         context = _context;
     }
 
     @NonNull
     @Override
-    protected ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
+    protected StarredViewBinder.ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
         View root = inflater.inflate(R.layout.fragment_posters, parent, false);
-        return new ViewHolder(root);
+        return new StarredViewBinder.ViewHolder(root);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Posters posters) {
+    protected void onBindViewHolder(@NonNull StarredViewBinder.ViewHolder holder, @NonNull final Posters posters) {
         holder.mIdView.setText(posters.getName());
         // holder.mContentView.setImageBitmap(posters.getHeader());
         Glide.with(context).load(posters.getImage_url()).into(holder.mContentView);
@@ -51,7 +46,7 @@ public class PostersViewBinder extends ItemViewBinder<Posters, PostersViewBinder
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onPosterClick(posters);
+                mListener.onStarredClick(posters);
             }
         });
     }

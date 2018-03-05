@@ -34,7 +34,7 @@ public class GridViewBinder extends ItemViewBinder<Grid, GridViewBinder.ViewHold
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Grid grid) {
         holder.mHeaderView.setText(grid.getArticle().getTitle());
-        holder.mContentView.setText(grid.getArticle().getUrl());
+        holder.mContentView.setText(grid.getArticle().getDate());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

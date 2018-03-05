@@ -76,7 +76,7 @@ public class RecommandFragment extends Fragment  {
     }
 
     @Override
-    // Note : Every time display this fragment, this function will be called .
+    // Note : Every time display (Not Replay) this fragment, this function will be called .
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);

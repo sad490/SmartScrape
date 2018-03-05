@@ -16,12 +16,12 @@ android:layout_height="match_parent">
             android:layout_height="330dp"
             android:background="@android:color/white"
             android:theme="@style/Theme.AppCompat"
-            app:contentScrim="@color/colorPrimary"
+            app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="25dp"
             app:expandedTitleMarginStart="30dp"
             app:expandedTitleTextAppearance="@style/TextApperance.Artist.Title"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:statusBarScrim="@color/colorPrimaryDark">
+            app:statusBarScrim="@color/white">
 
 
             <ImageView
@@ -52,10 +52,22 @@ android:layout_height="match_parent">
 
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/float_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/up"
+        app:backgroundTint="#fdfdfd"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="end|bottom|right" />
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
 

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.sad490.smartscrape.GridFragment.Element;
@@ -29,11 +30,12 @@ import java.util.List;
  * Created by sad490 on 2/14/18.
  */
 
-public class PosterDetail extends FragmentActivity implements GridFragment.OnGridItemClickListener
+public class PosterDetail extends BaseActivity implements GridFragment.OnGridItemClickListener
 {
 
     FrameLayout container;
     private ImageView poster = null;
+    private static Toolbar toolbar = null;
 
     private static String poster_url = "";
 
@@ -44,6 +46,7 @@ public class PosterDetail extends FragmentActivity implements GridFragment.OnGri
 
         container = (FrameLayout)findViewById(R.id.container);
         poster = (ImageView) findViewById(R.id.poster);
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
 
         GridFragment gridFragment;
         gridFragment = new GridFragment();
@@ -54,6 +57,8 @@ public class PosterDetail extends FragmentActivity implements GridFragment.OnGri
         // Tag tag = intent.getParcelableExtra("Item_Tag");
         ArrayList<Article> articles = intent.getParcelableArrayListExtra("Articles");
         poster_url = intent.getStringExtra("Poster_url");
+        String title = intent.getStringExtra("title");
+        toolbar.setTitle(title);
 
         Glide.with(this).load(poster_url).centerCrop().into(poster);
 
@@ -77,7 +82,7 @@ public class PosterDetail extends FragmentActivity implements GridFragment.OnGri
         intent.putExtra("title", item.getArticle().getTitle());
         intent.putExtra("blogurl", item.getArticle().getUrl());
         intent.putExtra("imageurl", poster_url);
-        startActivityForResult(intent, 1);
+        startActivity(intent);
     }
 
 }

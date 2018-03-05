@@ -39,6 +39,7 @@ import com.sad490.smartscrape.Posters.Posters;
 import com.sad490.smartscrape.Posters.PostersFragment;
 import com.sad490.smartscrape.Recommand.RecItem;
 import com.sad490.smartscrape.Recommand.RecommandFragment;
+import com.sad490.smartscrape.Recommand.StarredFragment;
 import com.sad490.smartscrape.Recommand.dummy.DummyContent;
 import com.sad490.smartscrape.StaticFragment.StaticFragment;
 import com.sad490.smartscrape.UserInfo.UserFragment;
@@ -47,12 +48,13 @@ import java.util.List;
 
 import me.drakeet.multitype.Items;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         UserFragment.OnFragmentInteractionListener,
         RecommandFragment.OnRecommandPageListener,
         PostersFragment.OnPostersListener,
-        StaticFragment.OnStaticListener
+        StaticFragment.OnStaticListener,
+        StarredFragment.OnStareedPageListener
 {
 
     private android.support.design.widget.TabLayout tabLayout;
@@ -66,11 +68,14 @@ public class MainActivity extends AppCompatActivity
 
     private static String class_url_to_load = "";
     private static String class_image_to_load = "";
+    private static String class_title = "";
 
     private static ArrayList<Article> articles = new ArrayList<>();
+    private static List<Posters> starred_posters = new ArrayList<>();
 
     private static final int Load_Data_finished = 1;
     private static final int Load_Detail_Data_finished = 2;
+    private static final int Load_Starred_Data_finished = 3;
 
     private static final String GenerHost = "http://111.230.181.121";
     // private static final int Load_Data_ = 1;
@@ -128,7 +133,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onPageSelected(int position) {
-                int[] ids = {R.id.home, R.id.search, R.id.comput, R.id.poster};
+                int[] ids = {R.id.home, R.id.poster,R.id.comput,R.id.search};
                 bottomNavigationView.setSelectedItemId(ids[position]);
                 Log.d("Page Selected : ", "Start");
             }
@@ -147,32 +152,39 @@ public class MainActivity extends AppCompatActivity
                     case R.id.home:
                         viewPager.setCurrentItem(0);
                         break;
-                    case R.id.search:
+                    case R.id.poster:
                         viewPager.setCurrentItem(1);
                         break;
                     case R.id.comput:
                         viewPager.setCurrentItem(2);
                         break;
-                    case R.id.poster:
+                    case R.id.search:
                         viewPager.setCurrentItem(3);
                         break;
+
                 }
                 return true;
             }
         });
         dialog.show();
         new Thread(Load_data).start();
+        // todo : Adjust the Client used by Thread .
+        // new Thread(Load_starred).start();
     }
 
     Runnable Load_data = new Runnable() {
         @Override
         public void run() {
             try {
+
                 tags = GetRecommand.GetTitleAndArticle(User.getHttpclient());
+
+                new Thread(Load_starred).start();
                 Message message = mHandler.obtainMessage();
                 message.what = Load_Data_finished;
                 mHandler.sendMessage(message);
             }catch (Exception e) {
+                new Thread(Load_data).start();
                 e.printStackTrace();
             }
         }
@@ -183,12 +195,27 @@ public class MainActivity extends AppCompatActivity
         public void run() {
             try {
                 List<Article> _articles = GrabClass.getClass(User.getHttpclient(), GenerHost + class_url_to_load);
+                articles.clear();
                 for (Article article : _articles) {
                     Log.d("Article : ", article.getTitle());
                     articles.add(article);
                 }
                 Message message = mHandler.obtainMessage();
                 message.what = Load_Detail_Data_finished;
+                mHandler.sendMessage(message);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    Runnable Load_starred = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                starred_posters = GetRecommand.getStarred(User.getHttpclient());
+                Message message = mHandler.obtainMessage();
+                message.what = Load_Starred_Data_finished;
                 mHandler.sendMessage(message);
             }catch (Exception e) {
                 e.printStackTrace();
@@ -206,17 +233,14 @@ public class MainActivity extends AppCompatActivity
                     Log.d("Load Data Finished", "Finished");
                     Items items = new Items();
                     List<String> Tags = new ArrayList<>();
-                    List<Posters> posters = new ArrayList<>();
                     for (int j = 0; j < tags.size(); ++j) {
                         for (int i = 0; i < tags.get(j).articles.size(); ++i) {
                             items.add(new RecItem(tags.get(j).getArticles().get(i)));
                         }
                         Tags.add(tags.get(j).getTag_name());
-                        posters.add(new Posters(tags.get(j).getTag_name(), Bitmap.createBitmap( 300, 300, Bitmap.Config.ARGB_8888)));
                         RecommandFragment.adapter.setItems(items);
                         RecommandFragment.adapter.notifyDataSetChanged();
                     }
-                    PostersFragment.setPosters(posters);
                     RecommandFragment.setTags(Tags);
                     break;
                 case Load_Detail_Data_finished:
@@ -225,7 +249,17 @@ public class MainActivity extends AppCompatActivity
                     intent.setClass(getApplicationContext(), PosterDetail.class);
                     intent.putParcelableArrayListExtra("Articles", articles);
                     intent.putExtra("Poster_url", class_image_to_load);
+                    intent.putExtra("title", class_title);
                     startActivityForResult(intent, 1);
+                    break;
+                case Load_Starred_Data_finished:
+                    Log.d("Load Starred Finished", "Finished");
+                    StarredFragment.posters = starred_posters;
+                    for (Posters posters1 : starred_posters) {
+                        Log.d("Starred :", posters1.getName());
+                    }
+//                    StarredFragment.adapter.setItems(starred_posters);
+//                    StarredFragment.adapter.notifyDataSetChanged();
                     break;
             }
         }
@@ -279,6 +313,7 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(getApplicationContext(), uri.getName(), Toast.LENGTH_SHORT).show();
         class_url_to_load = uri.getContent_url();
         class_image_to_load = uri.getImage_url();
+        class_title = uri.getName();
         dialog.show();
         new Thread(Load_class).start();
 //        Toast.makeText(getApplicationContext(), uri.id, Toast.LENGTH_SHORT).show();
@@ -286,6 +321,15 @@ public class MainActivity extends AppCompatActivity
 //        intent.setClass(getApplicationContext(), PosterDetail.class);
 //        intent.putExtra("Item_Id", uri.id);
 //        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    public void onStarredClick(Posters item){
+        Log.d("Starred : ", "" + item.getName());
+        class_url_to_load = item.getContent_url();
+        class_image_to_load = item.getImage_url();
+        dialog.show();
+        new Thread(Load_class).start();
     }
 
     @Override

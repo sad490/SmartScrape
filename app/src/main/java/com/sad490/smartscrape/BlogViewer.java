@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.sad490.smartscrape.NetWork.GrabArticle;
@@ -25,12 +26,12 @@ import me.drakeet.multitype.Items;
  * Created by sad490 on 2/16/18.
  */
 
-public class BlogViewer extends Activity {
+public class BlogViewer extends BaseActivity {
 
-    TextView title;
     TextView content;
 
     private ImageView poster = null;
+    private Toolbar toolbar = null;
 
     private static String blogurl = "";
 
@@ -45,14 +46,15 @@ public class BlogViewer extends Activity {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_blogviewer);
 
-        title = (TextView)findViewById(R.id.blogtitle);
         content = (TextView)findViewById(R.id.blogcontent);
         poster = (ImageView)findViewById(R.id.poster);
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
         content.setMovementMethod(new ScrollingMovementMethod());
 
         Intent intent = getIntent();
         String mTitle = intent.getStringExtra("title");
-        title.setText(mTitle);
+        toolbar.setTitle(mTitle);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.black));
 
         // todo : you need a get data function .
         blogurl = intent.getStringExtra("blogurl");

@@ -68,7 +68,7 @@ public class GridFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.addItemDecoration(new SpacesItemDecoration(8));
+
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -77,6 +77,8 @@ public class GridFragment extends Fragment {
             // TODO : You need adapter !!!
             // recyclerView.setAdapter(new GridAdapter(Element.getData(this.item_Id), mListener));
             recyclerView.setAdapter(adapter);
+            recyclerView.addItemDecoration(new RecycleViewDivider(
+                    context, LinearLayoutManager.HORIZONTAL, 5, getResources().getColor(R.color.black)));
         }
 
 

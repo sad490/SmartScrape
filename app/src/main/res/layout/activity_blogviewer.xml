@@ -15,12 +15,12 @@
             android:layout_height="200dp"
             android:background="@android:color/white"
             android:theme="@style/Theme.AppCompat"
-            app:contentScrim="@color/colorPrimary"
+            app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="25dp"
             app:expandedTitleMarginStart="30dp"
             app:expandedTitleTextAppearance="@style/TextApperance.Artist.Title"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:statusBarScrim="@color/colorPrimaryDark">
+            app:statusBarScrim="@color/white">
 
 
             <ImageView
@@ -46,33 +46,63 @@
 
             </android.support.v7.widget.Toolbar>
 
-
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
-        android:id="@+id/container"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
-
-        <TextView
-            android:id="@+id/blogtitle"
-            android:text="Title"
-            android:textSize="35dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
             android:id="@+id/blogcontent"
-            android:layout_below="@id/blogtitle"
             android:text="Content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:textSize="17dp"
             android:scrollbars = "vertical"/>
 
-    </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/float_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/up"
+        app:backgroundTint="#fdfdfd"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="end|bottom|right" />
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@drawable/text_back"-->
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" >-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/blogtitle"-->
+            <!--android:text="Title"-->
+            <!--android:textSize="35dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/blogcontent"-->
+            <!--android:layout_below="@id/blogtitle"-->
+            <!--android:text="Content"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:layout_marginRight="16dp"-->
+            <!--android:textSize="17dp"-->
+            <!--android:scrollbars = "vertical"/>-->
+
+    <!--</RelativeLayout>-->
 
 
 </android.support.design.widget.CoordinatorLayout>
