@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.sad490.smartscrape"
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 3
+        versionName "3.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        encoding "UTF-8"
+    }
+    useLibrary 'org.apache.http.legacy'
+    compileOptions.encoding="UTF-8"
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'me.drakeet.multitype:multitype:3.4.4'
+    compile 'codelight.studios:android-smart-login:1.2'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    // appcompat library
+    compile 'com.android.support:design:26.1.0'
+    compile 'jp.wasabeef:recyclerview-animators:2.3.0'
+    //design support library
+    compile 'org.jsoup:jsoup:1.11.2'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'co.lujun:androidtagview:1.1.1'
+    compile'com.nineoldandroids:library:2.4.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}

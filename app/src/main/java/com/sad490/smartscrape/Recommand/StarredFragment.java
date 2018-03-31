@@ -1,7 +1,10 @@
 package com.sad490.smartscrape.Recommand;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,14 +14,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sad490.smartscrape.NetWork.GetRecommand;
+import com.sad490.smartscrape.NetWork.User;
+import com.sad490.smartscrape.PosterDetail;
 import com.sad490.smartscrape.Posters.Posters;
 import com.sad490.smartscrape.R;
 import com.sad490.smartscrape.Recommand.dummy.DummyContent;
+
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import co.lujun.androidtagview.TagContainerLayout;
+import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 
 /**
@@ -37,6 +46,8 @@ public class StarredFragment extends Fragment {
     public static MultiTypeAdapter adapter;
 
     public static List<Posters> posters = new ArrayList<>();
+
+    private static final int Load_Starred_Data_finished = 3;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -66,6 +77,45 @@ public class StarredFragment extends Fragment {
         adapter.register(Posters.class, new StarredViewBinder(mListener, getContext()));
     }
 
+    Runnable Load_starred = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                DefaultHttpClient client = null;
+                synchronized ( this ){
+                    client = User.getHttpclient();
+                }
+                posters = GetRecommand.getStarred(client);
+                Message message = mHandler.obtainMessage();
+                message.what = Load_Starred_Data_finished;
+                mHandler.sendMessage(message);
+            }catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    Thread.sleep(3500);
+                }catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                new Thread(Load_starred).start();
+            }
+        }
+    };
+
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch( msg.what ) {
+                case Load_Starred_Data_finished:
+                    Log.d("Load Starred Finished", "Finished");
+                    adapter.setItems(posters);
+                    adapter.notifyDataSetChanged();
+//                    StarredFragment.adapter.setItems(starred_posters);
+//                    StarredFragment.adapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,7 +126,7 @@ public class StarredFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+
         Log.d("Adapter Init :", "finished");
         Context context = view.getContext();
         // recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
@@ -100,6 +150,7 @@ public class StarredFragment extends Fragment {
 //            }
 //            recyclerView_inside.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
 //        }
+        new Thread(Load_starred).start();
         return view;
     }
 

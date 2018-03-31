@@ -92,7 +92,7 @@ public class PostersFragment extends Fragment {
             try {
                 List<Poster_element> urls = new ArrayList<>();
 
-                 urls = GrabImage.grubPostersHeaders(User.getHttpclient(), "http://111.230.181.121/pub_list");
+                urls = GrabImage.grubPostersHeaders(User.getHttpclient(), "http://111.230.181.121/pub_list");
 
                 posters.clear();
                 for (Poster_element url : urls) {

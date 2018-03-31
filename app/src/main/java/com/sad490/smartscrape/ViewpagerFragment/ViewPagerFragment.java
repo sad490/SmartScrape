@@ -55,7 +55,7 @@ public class ViewPagerFragment extends Fragment {
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
         tabs.getTabAt(0).setText("推荐");
-        tabs.getTabAt(2).setText("分类");
+        tabs.getTabAt(2).setText("历史");
         tabs.getTabAt(1).setText("已关注");
 
         return view;

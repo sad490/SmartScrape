@@ -37,24 +37,29 @@ import com.sad490.smartscrape.NetWork.Tag;
 import com.sad490.smartscrape.NetWork.User;
 import com.sad490.smartscrape.Posters.Posters;
 import com.sad490.smartscrape.Posters.PostersFragment;
+import com.sad490.smartscrape.Recommand.FollowingFragment;
 import com.sad490.smartscrape.Recommand.RecItem;
 import com.sad490.smartscrape.Recommand.RecommandFragment;
 import com.sad490.smartscrape.Recommand.StarredFragment;
 import com.sad490.smartscrape.Recommand.dummy.DummyContent;
 import com.sad490.smartscrape.StaticFragment.StaticFragment;
 import com.sad490.smartscrape.UserInfo.UserFragment;
+
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import me.drakeet.multitype.Items;
 
-public class MainActivity extends BaseActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        UserFragment.OnFragmentInteractionListener,
+        UserFragment.OnUserFragmentListener,
         RecommandFragment.OnRecommandPageListener,
         PostersFragment.OnPostersListener,
         StaticFragment.OnStaticListener,
-        StarredFragment.OnStareedPageListener
+        StarredFragment.OnStareedPageListener,
+        FollowingFragment.OnFollowingPageListener
 {
 
     private android.support.design.widget.TabLayout tabLayout;
@@ -176,10 +181,11 @@ public class MainActivity extends BaseActivity
         @Override
         public void run() {
             try {
-
-                tags = GetRecommand.GetTitleAndArticle(User.getHttpclient());
-
-                new Thread(Load_starred).start();
+                DefaultHttpClient client = null;
+                synchronized (this) {
+                    client = User.getHttpclient();
+                }
+                tags = GetRecommand.GetTitleAndArticle(client);
                 Message message = mHandler.obtainMessage();
                 message.what = Load_Data_finished;
                 mHandler.sendMessage(message);
@@ -202,20 +208,6 @@ public class MainActivity extends BaseActivity
                 }
                 Message message = mHandler.obtainMessage();
                 message.what = Load_Detail_Data_finished;
-                mHandler.sendMessage(message);
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    Runnable Load_starred = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                starred_posters = GetRecommand.getStarred(User.getHttpclient());
-                Message message = mHandler.obtainMessage();
-                message.what = Load_Starred_Data_finished;
                 mHandler.sendMessage(message);
             }catch (Exception e) {
                 e.printStackTrace();
@@ -251,15 +243,6 @@ public class MainActivity extends BaseActivity
                     intent.putExtra("Poster_url", class_image_to_load);
                     intent.putExtra("title", class_title);
                     startActivityForResult(intent, 1);
-                    break;
-                case Load_Starred_Data_finished:
-                    Log.d("Load Starred Finished", "Finished");
-                    StarredFragment.posters = starred_posters;
-                    for (Posters posters1 : starred_posters) {
-                        Log.d("Starred :", posters1.getName());
-                    }
-//                    StarredFragment.adapter.setItems(starred_posters);
-//                    StarredFragment.adapter.notifyDataSetChanged();
                     break;
             }
         }
@@ -328,17 +311,24 @@ public class MainActivity extends BaseActivity
         Log.d("Starred : ", "" + item.getName());
         class_url_to_load = item.getContent_url();
         class_image_to_load = item.getImage_url();
+        class_title = item.getName();
         dialog.show();
         new Thread(Load_class).start();
     }
 
     @Override
-    public void onStaticItemInteraction(com.sad490.smartscrape.StaticFragment.dummy.DummyContent.DummyItem item) {
+    public void onUserFragmentInteraction(com.sad490.smartscrape.UserInfo.User user) {
 
     }
 
+
     @Override
-    public void onFragmentInteraction(Uri uri){
+    public void onFollowingClick(RecItem item){
+        Toast.makeText(this, "" + item.article.getTitle(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStaticItemInteraction(com.sad490.smartscrape.StaticFragment.dummy.DummyContent.DummyItem item) {
 
     }
 

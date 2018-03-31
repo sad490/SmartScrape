@@ -24,9 +24,9 @@ public class Article implements Parcelable{
         this.url = "";
     }
 
-    public Article(String _title, String _content) {
+    public Article(String _title, String _url) {
         this.title = _title;
-        this.url = _content;
+        this.url = _url;
     }
 
     public Article( Parcel parcel ) {

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.sad490.smartscrape.UserInfo.UserFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -20,14 +21,14 @@
             android:layout_height="200px"
             android:layout_gravity="center_horizontal"/>
 
-        <TextView
-            android:id="@+id/user_info"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:name="com.sad490.smartscrape.Posters.PostersFragment"
             android:layout_width="match_parent"
-            android:layout_height="500px"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="30dp"
-            android:textColor="#000000"/>
+            android:layout_height="wrap_content"
+            app:layoutManager="LinearLayoutManager"
+            tools:context="com.sad490.smartscrape.UserInfo.UserFragment"
+            tools:listitem="@layout/fragment_user_item" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_submit"

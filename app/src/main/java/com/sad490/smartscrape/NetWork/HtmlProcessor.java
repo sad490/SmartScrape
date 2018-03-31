@@ -55,6 +55,22 @@ public class HtmlProcessor {
         return ret;
     }
 
+    public static List<String> getArticlesPub( String html ) throws Exception {
+        List<String> ret = new ArrayList<>();
+        Document doc = Jsoup.parse(html);
+        Elements elements = doc.select("span.glyphicon").select(".glyphicon-user");
+        ret = elements.eachText();
+        return ret;
+    }
+
+    public static List<String> getArticlesDate( String html ) throws Exception {
+        List<String> ret = new ArrayList<>();
+        Document doc = Jsoup.parse(html);
+        Elements elements = doc.select("div.post-ft").select("span.date");
+        ret = elements.eachText();
+        return ret;
+    }
+
     public static List<String> getHeadersUrl( String html ) throws Exception {
         List<String> ret = new ArrayList<>();
         Document doc = Jsoup.parse(html);

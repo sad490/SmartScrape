@@ -5,6 +5,7 @@ import android.util.*;
 
 import com.sad490.smartscrape.Posters.Poster_element;
 import com.sad490.smartscrape.Posters.Posters;
+import com.sad490.smartscrape.Recommand.RecItem;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -68,6 +69,23 @@ public class GetRecommand {
             posters.add(new Posters(poster_element.getTitle(),  GenHost + poster_element.getImage_url(), poster_element.getPub_url()));
         }
         return posters;
+    }
+
+    public static List<RecItem> getHistory( DefaultHttpClient httpClient ) throws Exception {
+        List<RecItem> recItems = new ArrayList<>();
+        String html = getHtml(httpClient, "http://111.230.181.121/person");
+        List<String> titles  = HtmlProcessor.getArticlesTitle(html);
+        List<String> pubs = HtmlProcessor.getArticlesPub(html);
+        List<String> dates = HtmlProcessor.getArticlesDate(html);
+        List<String> urls = HtmlProcessor.getArticlesUrl(html);
+
+        for (int i = 0; i < titles.size(); ++i) {
+            Article article = new Article(titles.get(i), urls.get(i));
+            article.setDate(dates.get(i));
+            article.setPublisher(pubs.get(i));
+            recItems.add(new RecItem(article));
+        }
+        return recItems;
     }
 
     public static String getHtml( HttpClient httpClient, String url ) throws Exception {

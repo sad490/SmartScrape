@@ -1,15 +1,24 @@
 package com.sad490.smartscrape.Recommand;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sad490.smartscrape.NetWork.Article;
+import com.sad490.smartscrape.NetWork.GetRecommand;
+import com.sad490.smartscrape.NetWork.User;
 import com.sad490.smartscrape.R;
 import com.sad490.smartscrape.Recommand.dummy.DummyContent;
+
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +34,14 @@ public class FollowingFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-//    private FollowingFragment.OnRecommandPageListener mListener;
+    private FollowingFragment.OnFollowingPageListener mListener;
     public static Context context_App;
 
     public static MultiTypeAdapter adapter;
+
+    private static List<RecItem> rec_items = new ArrayList<>();
+
+    private static final int Load_History_Data_finished = 4;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -54,6 +67,8 @@ public class FollowingFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        adapter = new MultiTypeAdapter();
+        adapter.register(RecItem.class, new FollowingViewBinder(mListener, getContext()));
     }
 
     @Override
@@ -61,6 +76,9 @@ public class FollowingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_following, container, false);
         Context context = view.getContext();
+        RecyclerView recyclerView = view.findViewById(R.id.list);
+        recyclerView.addItemDecoration(new RecommandFragment.SpacesItemDecoration(8));
+        recyclerView.setAdapter(adapter);
         // recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         // recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
 
@@ -82,19 +100,65 @@ public class FollowingFragment extends Fragment {
 //            }
 //            recyclerView_inside.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
 //        }
+        new Thread(Load_his).start();
         return view;
     }
 
+    Runnable Load_his = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                DefaultHttpClient client = null;
+                synchronized ( this ){
+                    client = User.getHttpclient();
+                }
+                // todo ; Repair it !!!!!!!!!!!!!!!
+                rec_items = GetRecommand.getHistory( client );
+                Message message = mHandler.obtainMessage();
+                message.what = Load_History_Data_finished;
+                mHandler.sendMessage(message);
+            }catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    Thread.sleep(3500);
+                }catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                new Thread(Load_his).start();
+            }
+        }
+    };
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        new Thread(Load_his).start();
+    }
+
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch( msg.what ) {
+                case Load_History_Data_finished:
+                    Log.d("Load Starred Finished", "Finished");
+                    adapter.setItems(rec_items);
+                    adapter.notifyDataSetChanged();
+//                    StarredFragment.adapter.setItems(starred_posters);
+//                    StarredFragment.adapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof FollowingFragment.OnRecommandPageListener) {
-//            mListener = (FollowingFragment.OnRecommandPageListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnListFragmentInteractionListener");
-//        }
+        if (context instanceof FollowingFragment.OnFollowingPageListener) {
+            mListener = (FollowingFragment.OnFollowingPageListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
     }
 
     @Override
@@ -114,8 +178,28 @@ public class FollowingFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-//    public interface OnRecommandPageListener {
-//        // TODO: Update argument type and name
-//        void onRecommandClick(DummyContent.DummyItem item);
-//    }
+    public interface OnFollowingPageListener {
+        // TODO: Update argument type and name
+        void onFollowingClick(RecItem item);
+    }
+
+    public static class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+        private int space;
+
+        public SpacesItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view,
+                                   RecyclerView parent, RecyclerView.State state) {
+            outRect.left = space;
+            outRect.right = space;
+            outRect.bottom = space;
+
+            // Add top margin only for the first item to avoid double space between items
+            if (parent.getChildPosition(view) == 0)
+                outRect.top = space;
+        }
+    }
 }

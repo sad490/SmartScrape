@@ -1,0 +1,48 @@
+文件夹 PATH 列表
+卷序列号为 00000003 8238:A0A1
+D:.
+├─androidTest
+│  └─java
+│      └─com
+│          └─sad490
+│              └─smartscrape
+├─main
+│  ├─java
+│  │  └─com
+│  │      └─sad490
+│  │          └─smartscrape
+│  │              ├─DataStorage
+│  │              ├─GridFragment
+│  │              ├─Loaddata
+│  │              ├─NetWork
+│  │              ├─NewsDetail
+│  │              ├─Posters
+│  │              │  └─dummy
+│  │              ├─Recommand
+│  │              │  └─dummy
+│  │              ├─StaticFragment
+│  │              │  └─dummy
+│  │              ├─UserInfo
+│  │              └─ViewpagerFragment
+│  └─res
+│      ├─drawable
+│      ├─drawable-hdpi
+│      ├─drawable-mdpi
+│      ├─drawable-v24
+│      ├─drawable-xhdpi
+│      ├─drawable-xxhdpi
+│      ├─layout
+│      ├─menu
+│      ├─mipmap-anydpi-v26
+│      ├─mipmap-hdpi
+│      ├─mipmap-mdpi
+│      ├─mipmap-xhdpi
+│      ├─mipmap-xxhdpi
+│      ├─mipmap-xxxhdpi
+│      ├─values
+│      └─values-v21
+└─test
+    └─java
+        └─com
+            └─sad490
+                └─smartscrape
