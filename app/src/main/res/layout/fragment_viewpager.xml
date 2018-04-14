@@ -9,14 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
-        android:background="@color/pink"
+        android:background="@color/white"
         android:fillViewport="false"
         app:tabMode="fixed"
         app:layout_scrollFlags="scroll"
-        app:tabIndicatorColor="#0004ff"
+        app:tabIndicatorColor="@color/pink"
         app:tabIndicatorHeight="2.0dp"
-        app:tabSelectedTextColor="#00fffb"
-        app:tabTextColor="#000000">
+        app:tabSelectedTextColor="@color/black"
+        app:tabTextColor="@color/pink">
 
         <android.support.design.widget.TabItem
             android:id="@+id/tab1"

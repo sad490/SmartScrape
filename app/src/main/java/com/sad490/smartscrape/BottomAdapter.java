@@ -59,7 +59,7 @@ public class BottomAdapter extends FragmentPagerAdapter {
         Fragment fragment0 = ViewPagerFragment.newInstance( context, userData );
         //TODO : This Fragment must use Adapter !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         fragments.add(fragment0);
-        Fragment fragment3 = PostersFragment.newInstance(3);
+        Fragment fragment3 = PostersFragment.newInstance(3, context);
         fragments.add(fragment3);
         Fragment fragment2 = StaticFragment.newInstance(1);
         fragments.add(fragment2);

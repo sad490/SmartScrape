@@ -1,6 +1,7 @@
 package com.sad490.smartscrape;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import com.sad490.smartscrape.DataStorage.SaveData;
 import com.sad490.smartscrape.NetWork.Article;
+import com.sad490.smartscrape.NetWork.ArticlePage;
 import com.sad490.smartscrape.NetWork.GetRecommand;
 import com.sad490.smartscrape.NetWork.GrabClass;
 import com.sad490.smartscrape.NetWork.Tag;
@@ -72,10 +74,11 @@ public class MainActivity extends AppCompatActivity
     private static SharedPreferences sharedPreferences;
 
     private static String class_url_to_load = "";
-    private static String class_image_to_load = "";
-    private static String class_title = "";
+    private String class_image_to_load = "";
+    private String class_title = "";
 
-    private static ArrayList<Article> articles = new ArrayList<>();
+    /** todo: This Problem is so disturb ... I have to use this ugly expression . */
+    public static ArticlePage articles = null;
     private static List<Posters> starred_posters = new ArrayList<>();
 
     private static final int Load_Data_finished = 1;
@@ -83,6 +86,7 @@ public class MainActivity extends AppCompatActivity
     private static final int Load_Starred_Data_finished = 3;
 
     private static final String GenerHost = "http://111.230.181.121";
+
     // private static final int Load_Data_ = 1;
 
     @Override
@@ -122,7 +126,7 @@ public class MainActivity extends AppCompatActivity
         //setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-       // ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        // ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
         //        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         //drawer.addDrawerListener(toggle);
         //toggle.syncState();
@@ -171,8 +175,9 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
+
         dialog.show();
-        new Thread(Load_data).start();
+        CenterThreadController.executor.execute( Load_data );
         // todo : Adjust the Client used by Thread .
         // new Thread(Load_starred).start();
     }
@@ -181,6 +186,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void run() {
             try {
+                Log.e("Thread :: ", "Load_data");
                 DefaultHttpClient client = null;
                 synchronized (this) {
                     client = User.getHttpclient();
@@ -190,7 +196,15 @@ public class MainActivity extends AppCompatActivity
                 message.what = Load_Data_finished;
                 mHandler.sendMessage(message);
             }catch (Exception e) {
-                new Thread(Load_data).start();
+                CenterThreadController.executor.execute( Load_data );
+                // new Thread(Load_data).start();
+//
+//                /**
+//                 * todo : do not forget delete it .
+//                 */
+//                Message message = mHandler.obtainMessage();
+//                message.what = Load_Data_finished;
+//                mHandler.sendMessage(message);
                 e.printStackTrace();
             }
         }
@@ -200,16 +214,18 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void run() {
             try {
-                List<Article> _articles = GrabClass.getClass(User.getHttpclient(), GenerHost + class_url_to_load);
-                articles.clear();
-                for (Article article : _articles) {
-                    Log.d("Article : ", article.getTitle());
-                    articles.add(article);
-                }
+                Log.d("Thread :: ", "LoadCLass Running ... ");
+                articles = GrabClass.getClass(User.getHttpclient(), GenerHost + class_url_to_load);
+                // articles.clear();
+//                for (Article article : _articles) {
+//                    Log.d("Article : ", article.getTitle());
+//                    articles.add(article);
+//                }
                 Message message = mHandler.obtainMessage();
                 message.what = Load_Detail_Data_finished;
                 mHandler.sendMessage(message);
             }catch (Exception e) {
+                new Thread(Load_class).start();
                 e.printStackTrace();
             }
         }
@@ -222,6 +238,14 @@ public class MainActivity extends AppCompatActivity
             switch( msg.what ) {
                 case Load_Data_finished:
                     dialog.dismiss();
+                    // new Thread(Load_class).start();
+                    /**
+                     * Send the Broadcast to the Thread Controller .
+                     */
+                    Intent intent_ = new Intent();
+                    intent_.setAction("Load_Posters_finished");
+                    sendBroadcast(intent_);
+
                     Log.d("Load Data Finished", "Finished");
                     Items items = new Items();
                     List<String> Tags = new ArrayList<>();
@@ -237,9 +261,9 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case Load_Detail_Data_finished:
                     dialog.dismiss();
+                    Log.e("Thread :: ", articles.toString());
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), PosterDetail.class);
-                    intent.putParcelableArrayListExtra("Articles", articles);
                     intent.putExtra("Poster_url", class_image_to_load);
                     intent.putExtra("title", class_title);
                     startActivityForResult(intent, 1);
@@ -298,7 +322,8 @@ public class MainActivity extends AppCompatActivity
         class_image_to_load = uri.getImage_url();
         class_title = uri.getName();
         dialog.show();
-        new Thread(Load_class).start();
+        // new Thread(Load_class).start();
+        CenterThreadController.executor.execute( Load_class );
 //        Toast.makeText(getApplicationContext(), uri.id, Toast.LENGTH_SHORT).show();
 //        Intent intent = new Intent();
 //        intent.setClass(getApplicationContext(), PosterDetail.class);
@@ -313,7 +338,8 @@ public class MainActivity extends AppCompatActivity
         class_image_to_load = item.getImage_url();
         class_title = item.getName();
         dialog.show();
-        new Thread(Load_class).start();
+        // new Thread(Load_class).start();
+        CenterThreadController.executor.execute( Load_class );
     }
 
     @Override
@@ -330,6 +356,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStaticItemInteraction(com.sad490.smartscrape.StaticFragment.dummy.DummyContent.DummyItem item) {
 
+    }
+
+    public void help_to_Send_Broadcast( String content ) {
+        Intent intent_ = new Intent();
+        intent_.setAction("Load_Posters_finished");
+        sendBroadcast(intent_);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -378,5 +410,14 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
         super.onActivityResult(aRequestCode, aResultCode, aData);
+    }
+
+     @Override
+     public void onDestroy() {
+         super.onDestroy();
+     }
+
+    public void startLoaddataThread() {
+        new Thread(Load_data).start();
     }
 }

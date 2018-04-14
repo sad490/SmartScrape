@@ -1,6 +1,8 @@
 package com.sad490.smartscrape.Posters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sad490.smartscrape.CenterThreadController;
+import com.sad490.smartscrape.MainActivity;
 import com.sad490.smartscrape.NetWork.GrabImage;
 import com.sad490.smartscrape.NetWork.User;
 import com.sad490.smartscrape.R;
@@ -22,6 +26,7 @@ import com.sad490.smartscrape.Posters.dummy.DummyContent.DummyItem;
 import com.sad490.smartscrape.Recommand.RecItem;
 import com.sad490.smartscrape.Recommand.RecItemViewBinder;
 import com.sad490.smartscrape.Recommand.RecommandFragment;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +57,7 @@ public class PostersFragment extends Fragment {
     private static String url_to_load;
     public static MultiTypeAdapter adapter = new MultiTypeAdapter();
 
+    public static Context context;
     private static final int Load_Image_Finish = 1;
 
     public static int image_num = 0;
@@ -64,7 +70,7 @@ public class PostersFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static PostersFragment newInstance(int columnCount) {
+    public static PostersFragment newInstance(int columnCount, Context _context ) {
         PostersFragment fragment = new PostersFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
@@ -76,10 +82,16 @@ public class PostersFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             switch( msg.what ) {
+                /**
+                 * This thread does not only deal with Image .
+                 */
                 case Load_Image_Finish:
                     Log.d("Load Data Finished", "Finished");
                     adapter.setItems(posters);
                     adapter.notifyDataSetChanged();
+                    Intent intent = new Intent();
+                    intent.setAction("Start_Load_Starred");
+                    getActivity().sendBroadcast(intent);
                     break;
                 // case Load_Detail_Data_finished:
             }
@@ -90,6 +102,7 @@ public class PostersFragment extends Fragment {
         @Override
         public void run() {
             try {
+                Log.e("Thread :: ", "LoadImages");
                 List<Poster_element> urls = new ArrayList<>();
 
                 urls = GrabImage.grubPostersHeaders(User.getHttpclient(), "http://111.230.181.121/pub_list");
@@ -106,7 +119,7 @@ public class PostersFragment extends Fragment {
                 Message message = mHandler.obtainMessage();
                 message.what = Load_Image_Finish;
                 mHandler.sendMessage(message);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 try {
                     Thread.sleep(5000);
                 }catch (Exception e1) {
@@ -169,7 +182,7 @@ public class PostersFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new Thread(LoadingImages).start();
+        CenterThreadController.executor.execute(LoadingImages);
     }
 
     @Override

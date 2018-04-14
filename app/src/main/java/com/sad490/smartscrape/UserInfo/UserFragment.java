@@ -57,7 +57,7 @@ public class UserFragment extends Fragment {
         @Override
         public void run() {
             // todo : NOT FORGET THIS .
-            user_func.add(new User("Just For Test", "修改密码"));
+            user_func.add(new User("", "修改数据"));
             Message message = mHandler.obtainMessage();
             message.what = Load_Person_Finish;
             mHandler.sendMessage(message);

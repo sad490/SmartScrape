@@ -8,8 +8,6 @@
     tools:context="com.sad490.smartscrape.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-
-
     <com.sad490.smartscrape.SlideDisabledViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -26,9 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:itemBackground="@color/pink"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        android:alpha="1"
+        app:itemIconTint="@color/pink"
+        app:itemTextColor="@color/pink"
         app:tabMode="fixed"
         app:layout_constraintBottom_toBottomOf="@id/pager"
         app:menu="@menu/bottom_navigation_main" />

@@ -13,11 +13,14 @@
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
         android:padding="10dp"
-        app:container_enable_drag="false"
+        android:background="@color/white"
+        app:container_background_color="@color/white"
+        app:container_border_color="@color/white"
+        app:container_enable_drag="true"
         app:horizontal_interval="10dp"
         app:vertical_interval="10dp"
         app:tag_clickable="true"
-        app:tag_theme="pure_teal" />
+        app:tag_theme="random" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"

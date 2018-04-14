@@ -10,7 +10,7 @@
         android:layout_height="100dp" />
 
     <TextView
-        android:name="@+id/name"
+        android:id="@+id/name_for_user"
         android:layout_below="@id/header"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"

@@ -5,13 +5,17 @@ import android.app.ExpandableListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +45,14 @@ public class LoginActivity extends Activity {
 
     public static UserData userData = new UserData();
 
+    float alpha = 0;
+    int imageid = 0;
+    private static boolean flags = true;
+    private static LinearLayout layout = null;
+    private static LinearLayout child_layout = null;
+
+    private static Thread image_thread = null;
+
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -50,6 +62,8 @@ public class LoginActivity extends Activity {
         name = (EditText)findViewById(R.id.input_email);
         pwd_text = (EditText)findViewById(R.id.input_password);
         create_account = (TextView)findViewById(R.id.link_signup);
+        layout = (LinearLayout)findViewById(R.id.login_back);
+        child_layout = (LinearLayout)findViewById(R.id.chlid_back);
 
         List<String> keys = new ArrayList<>();
         List<String> values = new ArrayList<>();
@@ -136,6 +150,37 @@ public class LoginActivity extends Activity {
             }
         }
     };
+
+//    Runnable ImageChange = new Runnable() {
+//        @Override
+//        public void run() {
+//            try {
+//                while (true) {
+//                    try {
+//                        Thread.sleep(100);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    updateAlphas();
+//                    Log.d("Image Thread ::", "Update");
+//                }
+//            } catch (Exception e) {
+//                image_thread = new Thread(ImageChange);
+//                image_thread.start();
+//                e.printStackTrace();
+//            }
+//        }
+//    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

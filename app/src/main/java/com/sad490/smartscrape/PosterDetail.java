@@ -19,6 +19,7 @@ import com.sad490.smartscrape.GridFragment.Element;
 import com.sad490.smartscrape.GridFragment.Grid;
 import com.sad490.smartscrape.GridFragment.GridFragment;
 import com.sad490.smartscrape.NetWork.Article;
+import com.sad490.smartscrape.NetWork.ArticlePage;
 import com.sad490.smartscrape.NetWork.Log;
 import com.sad490.smartscrape.NetWork.Tag;
 import com.sad490.smartscrape.Posters.Posters;
@@ -55,7 +56,7 @@ public class PosterDetail extends BaseActivity implements GridFragment.OnGridIte
 
         Intent intent = getIntent();
         // Tag tag = intent.getParcelableExtra("Item_Tag");
-        ArrayList<Article> articles = intent.getParcelableArrayListExtra("Articles");
+        ArticlePage articles = MainActivity.articles;
         poster_url = intent.getStringExtra("Poster_url");
         String title = intent.getStringExtra("title");
         toolbar.setTitle(title);
@@ -63,7 +64,7 @@ public class PosterDetail extends BaseActivity implements GridFragment.OnGridIte
         Glide.with(this).load(poster_url).centerCrop().into(poster);
 
         List<Grid> grids = new ArrayList<>();
-        for (Article article : articles) {
+        for (Article article : articles.getArticles()) {
             Log.d("Article :::", article.getTitle());
             grids.add(new Grid(article));
         }

@@ -17,7 +17,6 @@
             android:theme="@style/SplashTheme_new">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,6 +33,7 @@
         <activity android:name=".BlogViewer"
             android:theme="@style/MainTheme"/>
         <activity android:name=".LoginActivity"/>
+        <activity android:name=".UserInfo.ChagePersonActivity"/>
     </application>
 
 </manifest>

@@ -89,6 +89,7 @@ public class BlogViewer extends BaseActivity {
                 message.what = LOAD_ARTICLE_FINISHED;
                 mHandler.sendMessage(message);
             }catch (Exception e) {
+                new Thread(loadBlog).start();
                 e.printStackTrace();
             }
         }

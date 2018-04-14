@@ -18,30 +18,40 @@ import java.util.List;
 
 public class GrabClass {
 
-    public static List<Article> getClass(DefaultHttpClient httpClient, String startUrl) throws Exception {
+    public static ArticlePage getClass(DefaultHttpClient httpClient, String startUrl) throws Exception {
         List<Article> ret = new ArrayList<>();
         Log.d("Url :", startUrl);
         String html = getHtml(httpClient, startUrl);
         String nextPageUrl = HtmlProcessor.getNextPage(html);
-        int page_num = 0;
-         do {
-            List<String> titles = HtmlProcessor.getArticlesTitle(html);
-            List<String> urls = HtmlProcessor.getArticlesUrl(html);
-            for (int i = 0; i < titles.size(); ++i) {
-                ret.add(new Article(titles.get(i), urls.get(i)));
-            }
-            html = getHtml(httpClient, startUrl + nextPageUrl);
-            nextPageUrl = HtmlProcessor.getNextPage(html);
-//            String index = nextPageUrl.substring(nextPageUrl.indexOf("=") + 1);
-//            int num = Integer.parseInt(index);
-//            if (num > page_num) {
-//                page_num = num;
-//            }else{
-//                break;
+
+        html = getHtml(httpClient, startUrl + nextPageUrl);
+        List<String> titles = HtmlProcessor.getArticlesTitle(html);
+        List<String> urls = HtmlProcessor.getArticlesUrl(html);
+        for (int i = 0; i < titles.size(); ++i) {
+            ret.add(new Article(titles.get(i), urls.get(i)));
+        }
+        nextPageUrl = HtmlProcessor.getNextPage(html);
+        ArticlePage articlePage = new ArticlePage( ret, nextPageUrl );
+        return articlePage;
+//        int page_num = 0;
+//         do {
+//            List<String> titles = HtmlProcessor.getArticlesTitle(html);
+//            List<String> urls = HtmlProcessor.getArticlesUrl(html);
+//            for (int i = 0; i < titles.size(); ++i) {
+//                ret.add(new Article(titles.get(i), urls.get(i)));
 //            }
-            Log.d("NextUrl", "" + nextPageUrl);
-        } while ( !nextPageUrl.equals("") );
-        return ret;
+//            html = getHtml(httpClient, startUrl + nextPageUrl);
+//            nextPageUrl = HtmlProcessor.getNextPage(html);
+////            String index = nextPageUrl.substring(nextPageUrl.indexOf("=") + 1);
+////            int num = Integer.parseInt(index);
+////            if (num > page_num) {
+////                page_num = num;
+////            }else{
+////                break;
+////            }
+//            Log.d("NextUrl", "" + nextPageUrl);
+//        } while ( !nextPageUrl.equals("") );
+        // return ret;
     }
 
     private static String getHtml(HttpClient httpClient, String url ) throws Exception {

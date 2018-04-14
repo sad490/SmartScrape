@@ -56,7 +56,7 @@ public class UserViewBinder extends ItemViewBinder<User, UserViewBinder.ViewHold
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.name);
+            mIdView = (TextView) view.findViewById(R.id.name_for_user);
             mContentView = (ImageView) view.findViewById(R.id.header);
         }
 

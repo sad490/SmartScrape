@@ -77,7 +77,7 @@ public class StarredFragment extends Fragment {
         adapter.register(Posters.class, new StarredViewBinder(mListener, getContext()));
     }
 
-    Runnable Load_starred = new Runnable() {
+    private static Runnable Load_starred = new Runnable() {
         @Override
         public void run() {
             try {
@@ -101,7 +101,7 @@ public class StarredFragment extends Fragment {
         }
     };
 
-    Handler mHandler = new Handler(){
+    private static Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch( msg.what ) {
@@ -150,7 +150,7 @@ public class StarredFragment extends Fragment {
 //            }
 //            recyclerView_inside.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
 //        }
-        new Thread(Load_starred).start();
+        // new Thread(Load_starred).start();
         return view;
     }
 
@@ -185,6 +185,10 @@ public class StarredFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         // mListener = null;
+    }
+
+    public static void startThread() {
+        new Thread(Load_starred).start();
     }
 
 
